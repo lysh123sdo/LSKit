@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9761A8332058AFD400B09705 /* LSToastViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9761A8312058AFD400B09705 /* LSToastViewManager.h */; };
+		9761A8342058AFD400B09705 /* LSToastViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9761A8322058AFD400B09705 /* LSToastViewManager.m */; };
 		9775D282204D5E1300C2D765 /* LSKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9775D280204D5E1300C2D765 /* LSKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9775D2C5204D5F3F00C2D765 /* LSMessageList.m in Sources */ = {isa = PBXBuildFile; fileRef = 9775D2B9204D5F3E00C2D765 /* LSMessageList.m */; };
 		9775D2C6204D5F3F00C2D765 /* LSMQMessageListManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9775D2BA204D5F3E00C2D765 /* LSMQMessageListManager.h */; };
@@ -32,9 +34,15 @@
 		9775D2E8204D5F6F00C2D765 /* NSString+LS.h in Headers */ = {isa = PBXBuildFile; fileRef = 9775D2DC204D5F6F00C2D765 /* NSString+LS.h */; };
 		9775D2EC204D606200C2D765 /* LSLibBaseDataBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9775D2EA204D606200C2D765 /* LSLibBaseDataBridge.m */; };
 		9775D2ED204D606200C2D765 /* LSLibBaseDataBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 9775D2EB204D606200C2D765 /* LSLibBaseDataBridge.h */; };
+		979C5CAC2057C768007115D5 /* LSToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 979C5CAA2057C768007115D5 /* LSToastView.m */; };
+		979C5CAD2057C768007115D5 /* LSToastView.h in Headers */ = {isa = PBXBuildFile; fileRef = 979C5CAB2057C768007115D5 /* LSToastView.h */; };
+		979C5CB02057C8E7007115D5 /* LSSizeUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 979C5CAE2057C8E7007115D5 /* LSSizeUtils.h */; };
+		979C5CB12057C8E7007115D5 /* LSSizeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 979C5CAF2057C8E7007115D5 /* LSSizeUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9761A8312058AFD400B09705 /* LSToastViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSToastViewManager.h; sourceTree = "<group>"; };
+		9761A8322058AFD400B09705 /* LSToastViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSToastViewManager.m; sourceTree = "<group>"; };
 		9775D27D204D5E1300C2D765 /* LSKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LSKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9775D280204D5E1300C2D765 /* LSKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSKit.h; sourceTree = "<group>"; };
 		9775D281204D5E1300C2D765 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -62,6 +70,10 @@
 		9775D2DC204D5F6F00C2D765 /* NSString+LS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+LS.h"; sourceTree = "<group>"; };
 		9775D2EA204D606200C2D765 /* LSLibBaseDataBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSLibBaseDataBridge.m; sourceTree = "<group>"; };
 		9775D2EB204D606200C2D765 /* LSLibBaseDataBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSLibBaseDataBridge.h; sourceTree = "<group>"; };
+		979C5CAA2057C768007115D5 /* LSToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSToastView.m; sourceTree = "<group>"; };
+		979C5CAB2057C768007115D5 /* LSToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSToastView.h; sourceTree = "<group>"; };
+		979C5CAE2057C8E7007115D5 /* LSSizeUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSSizeUtils.h; sourceTree = "<group>"; };
+		979C5CAF2057C8E7007115D5 /* LSSizeUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSSizeUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +106,7 @@
 		9775D27F204D5E1300C2D765 /* LSKit */ = {
 			isa = PBXGroup;
 			children = (
+				979C5CA92057C760007115D5 /* UIKit */,
 				9775D2E9204D605900C2D765 /* KVO */,
 				9775D288204D5E3500C2D765 /* MQ */,
 				9775D293204D5E3500C2D765 /* Utils */,
@@ -135,6 +148,8 @@
 				9775D2D9204D5F6F00C2D765 /* UIColor+LS.m */,
 				9775D2D4204D5F6F00C2D765 /* UIImage+LS.h */,
 				9775D2D7204D5F6F00C2D765 /* UIImage+LS.m */,
+				979C5CAE2057C8E7007115D5 /* LSSizeUtils.h */,
+				979C5CAF2057C8E7007115D5 /* LSSizeUtils.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -148,6 +163,17 @@
 			path = KVO;
 			sourceTree = "<group>";
 		};
+		979C5CA92057C760007115D5 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				979C5CAB2057C768007115D5 /* LSToastView.h */,
+				979C5CAA2057C768007115D5 /* LSToastView.m */,
+				9761A8312058AFD400B09705 /* LSToastViewManager.h */,
+				9761A8322058AFD400B09705 /* LSToastViewManager.m */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -159,9 +185,12 @@
 				9775D2CE204D5F3F00C2D765 /* LSMessageList.h in Headers */,
 				9775D2DD204D5F6F00C2D765 /* UIColor+LS.h in Headers */,
 				9775D2ED204D606200C2D765 /* LSLibBaseDataBridge.h in Headers */,
+				979C5CAD2057C768007115D5 /* LSToastView.h in Headers */,
 				9775D282204D5E1300C2D765 /* LSKit.h in Headers */,
 				9775D2CB204D5F3F00C2D765 /* LSMessageQueue.h in Headers */,
+				979C5CB02057C8E7007115D5 /* LSSizeUtils.h in Headers */,
 				9775D2E4204D5F6F00C2D765 /* LSJsonUtils.h in Headers */,
+				9761A8332058AFD400B09705 /* LSToastViewManager.h in Headers */,
 				9775D2E0204D5F6F00C2D765 /* UIImage+LS.h in Headers */,
 				9775D2E2204D5F6F00C2D765 /* LSRuntimeUtils.h in Headers */,
 				9775D2C6204D5F3F00C2D765 /* LSMQMessageListManager.h in Headers */,
@@ -240,9 +269,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				9775D2E6204D5F6F00C2D765 /* NSString+LS.m in Sources */,
+				979C5CB12057C8E7007115D5 /* LSSizeUtils.m in Sources */,
 				9775D2CF204D5F3F00C2D765 /* LSMQMessageListManager.m in Sources */,
 				9775D2C9204D5F3F00C2D765 /* LSMessageModel.m in Sources */,
 				9775D2EC204D606200C2D765 /* LSLibBaseDataBridge.m in Sources */,
+				979C5CAC2057C768007115D5 /* LSToastView.m in Sources */,
 				9775D2E5204D5F6F00C2D765 /* UIColor+LS.m in Sources */,
 				9775D2E7204D5F6F00C2D765 /* LSFileHelper.m in Sources */,
 				9775D2C8204D5F3F00C2D765 /* LSMessageQueue.m in Sources */,
@@ -251,6 +282,7 @@
 				9775D2E3204D5F6F00C2D765 /* UIImage+LS.m in Sources */,
 				9775D2DE204D5F6F00C2D765 /* LSJsonUtils.m in Sources */,
 				9775D2DF204D5F6F00C2D765 /* LSRuntimeUtils.m in Sources */,
+				9761A8342058AFD400B09705 /* LSToastViewManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
