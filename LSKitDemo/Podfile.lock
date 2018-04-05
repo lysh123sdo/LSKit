@@ -1,0 +1,21 @@
+PODS:
+  - LSKit (0.0.1):
+    - YYKit (~> 1.0.9)
+  - YYKit (1.0.9):
+    - YYKit/no-arc (= 1.0.9)
+  - YYKit/no-arc (1.0.9)
+
+DEPENDENCIES:
+  - LSKit (from `../`)
+
+EXTERNAL SOURCES:
+  LSKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  LSKit: f39e305e92369deca917c66aebc2159556f2d3d2
+  YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
+
+PODFILE CHECKSUM: 0c02b6463c01bfe60f7fb75a66584873ab5ae0a8
+
+COCOAPODS: 1.2.1

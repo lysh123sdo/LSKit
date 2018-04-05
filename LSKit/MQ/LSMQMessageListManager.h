@@ -25,8 +25,6 @@
 /**取消话题监听**/
 -(void)removeTopic:(NSString*)topic target:(id)target;
 
--(void)removeTopic:(id)topic;
-
 /**取消话题监听**/
 -(void)removeTarget:(id)target;
 

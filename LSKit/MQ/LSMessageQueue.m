@@ -44,7 +44,7 @@
     
     if (self = [super init]) {
         
-        self.name = @"com.gw.msgQueue";
+        self.name = @"com.Lson.msgQueue";
         _delegate = delegate;
         
         _waitingNum = 100;
@@ -294,9 +294,6 @@
         id<LSMQTopicReceiveProtocol> target = obj;
         
         if ([target respondsToSelector:@selector(topicReceive:topic:)]) {
-        
-            NSLog(@"派发 %@",topic);
-            
             [target topicReceive:msg topic:topic];
             
         }

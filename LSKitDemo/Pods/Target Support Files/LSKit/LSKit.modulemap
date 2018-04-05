@@ -1,0 +1,6 @@
+framework module LSKit {
+  umbrella header "LSKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

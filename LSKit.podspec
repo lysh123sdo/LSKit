@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
  
   s.description  = "为了方便开发，收集的各类工具"
 
-  s.homepage     = "https://github.com/lysh123sdo"
+  s.homepage     = "https://www.baidu.com/"
 
   s.license      = "MIT"
   
@@ -20,11 +20,10 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
 
   
- # s.source       = { :git => "../"}
+#  s.source       = { :git => "./", :tag => s.version.to_s}
   s.source_files  = "LSKit/**/*.{h,m}"
   s.source           = { :git => 'https://github.com/lysh123sdo/LSKit.git', :tag => s.version.to_s}
-#s.source           = { :git => 'https://github.com/lysh123sdo/LSKit.git', :tag => s.version.to_s }
   s.requires_arc = true
-  #s.dependency 'YYKit', '~> 1.0.9'
+  s.dependency 'YYKit', '~> 1.0.9'
   
 end

@@ -8,16 +8,13 @@
 
 #import "LSMQMessageListManager.h"
 #import "LSMessageQueue.h"
-#import <pthread.h>
+#import <YYKit/YYkit.h>
 @interface LSMQMessageListManager()
-{
-    pthread_mutex_t _lock;
 
-}
-@property (nonatomic , strong) NSMutableDictionary *cacheMsgDic;
-@property (nonatomic , strong) NSMutableArray *tempMsgArray;
+@property (nonatomic , strong) YYThreadSafeDictionary *cacheMsgDic;
+@property (nonatomic , strong) YYThreadSafeArray *tempMsgArray;
 @property (nonatomic , assign) NSInteger maxQueueNum;
-@property (nonatomic , strong) NSMutableArray *msgQueueListArray;
+@property (nonatomic , strong) YYThreadSafeArray *msgQueueListArray;
 @property (nonatomic , assign) BOOL isRunning;
 
 @end
@@ -64,13 +61,10 @@ static LSMQMessageListManager *_instance;
     if (self = [super init]) {
         
         _maxQueueNum = 4;
-        _msgQueueListArray = [NSMutableArray arrayWithCapacity:0];
-        _cacheMsgDic = [NSMutableDictionary dictionaryWithCapacity:0];
-        _tempMsgArray = [NSMutableArray arrayWithCapacity:0];
-        
-       
-        pthread_mutex_init(&_lock, NULL);
-        
+        _msgQueueListArray = [YYThreadSafeArray arrayWithCapacity:0];
+        _cacheMsgDic = [YYThreadSafeDictionary dictionaryWithCapacity:0];
+        _tempMsgArray = [YYThreadSafeArray arrayWithCapacity:0];
+      
         [self addDefaultMsgQueue];
     }
     
@@ -137,22 +131,6 @@ static LSMQMessageListManager *_instance;
         [queue removeAllTopic];
     }
 
-}
-
--(void)removeTopic:(id)topic{
-    
-    pthread_mutex_lock(&_lock);
-    
-    for (int i = 0; i < _msgQueueListArray.count; i++) {
-        
-        LSMessageQueue *queue = [_msgQueueListArray objectAtIndex:i];
-        
-        if ([queue topicExis:topic]) {
-            [queue removeTopic:topic];
-        }
-    }
-    
-    pthread_mutex_unlock(&_lock);
 }
 
 /**取消话题监听**/
@@ -258,9 +236,7 @@ static LSMQMessageListManager *_instance;
  level:消息优先级
  **/
 -(void)addMsg:(id)msg topic:(NSString*)topic level:(NSInteger)level{
-    
-    pthread_mutex_lock(&_lock);
-    
+
     LSMessageModel *model = [LSMessageModel new];
     model.msg = msg;
     model.level = level;
@@ -268,8 +244,7 @@ static LSMQMessageListManager *_instance;
     [_tempMsgArray addObject:model];
     
     [self push];
-    
-    pthread_mutex_unlock(&_lock);
+
 }
 
 #pragma mark -
@@ -295,8 +270,7 @@ static LSMQMessageListManager *_instance;
 -(void)messageQueueIsWaitingMessage:(LSMessageQueue*)queue{
     
     [self addMessages:queue];
-  
-    NSLog(@"派发完成");
+
 }
 
 -(void)push{
@@ -307,16 +281,14 @@ static LSMQMessageListManager *_instance;
     
     if (model) {
         [queue push:model];
-        [_tempMsgArray removeObjectAtIndex:0];
+        [_tempMsgArray removeObject:model];
         self.isRunning = YES;
     }
     
 }
 
 -(void)addMessages:(LSMessageQueue*)queue{
-    
-    pthread_mutex_lock(&_lock);
-    
+
     NSInteger msgCount = queue.maxMsgNum > _tempMsgArray.count ? _tempMsgArray.count : queue.maxMsgNum;
     NSMutableArray *msgs = [NSMutableArray arrayWithCapacity:msgCount];
     for (int i = 0; i < msgCount; i++) {
@@ -324,7 +296,7 @@ static LSMQMessageListManager *_instance;
         [msgs addObject:[_tempMsgArray objectAtIndex:i]];
         
     }
-    
+    [queue pushMsgs:msgs];
     [_tempMsgArray removeObjectsInArray:msgs];
     
     if (_tempMsgArray.count > 0) {
@@ -334,9 +306,7 @@ static LSMQMessageListManager *_instance;
         
         self.isRunning = NO;
     }
-    
-    pthread_mutex_unlock(&_lock);
-    
+ 
 }
 
 

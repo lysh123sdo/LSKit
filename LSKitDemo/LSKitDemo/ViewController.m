@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 
+#import <LSKit/LSKit.h>
 @interface ViewController ()
 
 @end
@@ -16,9 +17,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    [[LSMQMessageListManager shareInstance] addTopic:(id<LSMQTopicReceiveProtocol>)self topic:@"test"];
+    
+    
+    [[LSMQMessageListManager shareInstance] addMsg:@"测试" topic:@"test"];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
+
+-(void)topicReceive:(id)msg topic:(NSString*)topic{
+    
+    NSLog(@"@@@@@@@@ %@",topic);
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
