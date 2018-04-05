@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   
  # s.source       = { :git => "../"}
   s.source_files  = "LSKit/**/*.{h,m}"
-  s.source           = { :git => 'https://github.com/lysh123sdo/LSKit.git'}
+  s.source           = { :git => 'https://github.com/lysh123sdo/LSKit.git', :tag => s.version.to_s}
 #s.source           = { :git => 'https://github.com/lysh123sdo/LSKit.git', :tag => s.version.to_s }
   s.requires_arc = true
   #s.dependency 'YYKit', '~> 1.0.9'
