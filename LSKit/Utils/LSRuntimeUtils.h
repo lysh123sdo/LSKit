@@ -15,4 +15,10 @@
  **/
 + (void)lsExchangeOriginFun:(SEL)oldSel newFun:(SEL)newSel;
 
+/**获取类的属性值**/
++(NSDictionary*)infosFromObj:(id)data keys:(NSArray*)keys;
+
+/**获取一个类的属性值**/
++(NSArray*)keysOfClass:(Class)cls;
+
 @end

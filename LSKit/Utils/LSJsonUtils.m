@@ -19,4 +19,18 @@
     return result;
 }
 
++(id)objToJson:(id)data{
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
+                                                       options:NSJSONReadingMutableLeaves | NSJSONReadingAllowFragments
+                                                         error:nil];
+    if (data == nil) {
+        return nil;
+    }
+    
+    NSString *string = [[NSString alloc] initWithData:jsonData
+                                             encoding:NSUTF8StringEncoding];
+    return string;
+}
+
 @end

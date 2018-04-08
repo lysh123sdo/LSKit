@@ -12,4 +12,6 @@
 
 +(id)jsonToObj:(NSData*)data;
 
++(id)objToJson:(id)data;
+
 @end

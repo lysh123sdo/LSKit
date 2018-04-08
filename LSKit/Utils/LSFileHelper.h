@@ -130,4 +130,11 @@
 
 +(NSString *)GetPathForCaches:(NSString *)filename inDir:(NSString *)dir;
 
+/**
+ 获取一个bundle
+ cls:获取的类
+ name:bundle名
+ **/
++ (NSBundle *)bundleForClass:(Class)cls moduleName:(NSString *)name;
+
 @end

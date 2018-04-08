@@ -250,5 +250,20 @@
     return [[self GetDirectoryForCaches:dir] stringByAppendingPathComponent:filename];
 }
 
-
+/**获取一个bundle**/
++ (NSBundle *)bundleForClass:(Class)cls moduleName:(NSString *)name {
+    
+    NSParameterAssert(cls);
+    NSParameterAssert(name);
+    
+    if (cls && name) {
+        NSBundle *bundle = [NSBundle bundleForClass:cls];
+        NSURL *url = [bundle URLForResource:name withExtension:@"bundle"];
+        if (url) {
+            return [NSBundle bundleWithURL:url];
+        }
+    }
+    
+    return nil;
+}
 @end
