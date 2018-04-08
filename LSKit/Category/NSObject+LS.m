@@ -9,4 +9,9 @@
 
 @implementation NSObject (LS)
 
+//+(id)objectToModel:(Class)class data:(id)data{
+//
+//    return nil;
+//}
+
 @end
