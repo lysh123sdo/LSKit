@@ -10,6 +10,10 @@
 #endif
 #endif
 
+#import "NSObject+LS.h"
+#import "NSString+LS.h"
+#import "UIColor+LS.h"
+#import "UIImage+LS.h"
 #import "LSLibBaseDataBridge.h"
 #import "LSKit.h"
 #import "LSMessageList.h"
@@ -23,9 +27,6 @@
 #import "LSJsonUtils.h"
 #import "LSRuntimeUtils.h"
 #import "LSSizeUtils.h"
-#import "NSString+LS.h"
-#import "UIColor+LS.h"
-#import "UIImage+LS.h"
 
 FOUNDATION_EXPORT double LSKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char LSKitVersionString[];
