@@ -8,14 +8,18 @@ PODS:
 DEPENDENCIES:
   - LSKit (from `../`)
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - YYKit
+
 EXTERNAL SOURCES:
   LSKit:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  LSKit: f39e305e92369deca917c66aebc2159556f2d3d2
+  LSKit: 2887714eb04e90daf7a4090424f0b47fc1bc7ccf
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
 PODFILE CHECKSUM: 77b245e5a829e73bf065b0a767321a59373a2fe3
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.5.0

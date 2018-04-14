@@ -19,7 +19,7 @@
 #import <LSKit/LSSizeUtils.h>
 #import <LSKit/NSString+LS.h>
 #import <LSKit/UIColor+LS.h>
-#import <LSKit/UIColorUIImage+LS.h>
+#import <LSKit/UIImage+LS.h>
 
 
 
