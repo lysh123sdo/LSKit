@@ -13,6 +13,8 @@
 		971BC9D02075CB0900BD773D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 971BC9CF2075CB0900BD773D /* Assets.xcassets */; };
 		971BC9D32075CB0900BD773D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 971BC9D12075CB0900BD773D /* LaunchScreen.storyboard */; };
 		971BC9D62075CB0900BD773D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 971BC9D52075CB0900BD773D /* main.m */; };
+		97CC023120B436B800044B22 /* TestPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 97CC023020B436B800044B22 /* TestPlugin.m */; };
+		97CC023420B449D900044B22 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97CC023320B449D900044B22 /* TestViewController.m */; };
 		A2E7D89177D8473E9140C05B /* Pods_LSKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008FC65DE8291FC471C65836 /* Pods_LSKitDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +31,10 @@
 		971BC9D22075CB0900BD773D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		971BC9D42075CB0900BD773D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		971BC9D52075CB0900BD773D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		97CC022F20B436B800044B22 /* TestPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestPlugin.h; sourceTree = "<group>"; };
+		97CC023020B436B800044B22 /* TestPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestPlugin.m; sourceTree = "<group>"; };
+		97CC023220B449D900044B22 /* TestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
+		97CC023320B449D900044B22 /* TestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
 		BDC65EF7A68696E6BBECECF6 /* Pods-LSKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSKitDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LSKitDemo/Pods-LSKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,6 +97,10 @@
 				971BC9D12075CB0900BD773D /* LaunchScreen.storyboard */,
 				971BC9D42075CB0900BD773D /* Info.plist */,
 				971BC9D52075CB0900BD773D /* main.m */,
+				97CC022F20B436B800044B22 /* TestPlugin.h */,
+				97CC023020B436B800044B22 /* TestPlugin.m */,
+				97CC023220B449D900044B22 /* TestViewController.h */,
+				97CC023320B449D900044B22 /* TestViewController.m */,
 			);
 			path = LSKitDemo;
 			sourceTree = "<group>";
@@ -211,7 +221,9 @@
 			files = (
 				971BC9CB2075CB0900BD773D /* ViewController.m in Sources */,
 				971BC9D62075CB0900BD773D /* main.m in Sources */,
+				97CC023120B436B800044B22 /* TestPlugin.m in Sources */,
 				971BC9C82075CB0900BD773D /* AppDelegate.m in Sources */,
+				97CC023420B449D900044B22 /* TestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

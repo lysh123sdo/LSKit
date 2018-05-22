@@ -20,6 +20,9 @@
 #import <LSKit/NSString+LS.h>
 #import <LSKit/UIColor+LS.h>
 #import <LSKit/UIImage+LS.h>
+#import <LSKit/LSPlugin.h>
+#import <LSKit/LSRouter.h>
+
 
 
 

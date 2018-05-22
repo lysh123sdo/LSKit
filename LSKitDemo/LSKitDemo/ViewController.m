@@ -18,14 +18,32 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[LSRouter sharedRouter] setNavigationController:self.navigationController];
     
-    [[LSMQMessageListManager shareInstance] addTopic:(id<LSMQTopicReceiveProtocol>)self topic:@"test"];
+    [[LSRouter sharedRouter] map:@"TestViewController" toController:NSClassFromString(@"TestViewController")];
     
-    
-    [[LSMQMessageListManager shareInstance] addMsg:@"测试" topic:@"test"];
+//    [[LSMQMessageListManager shareInstance] addTopic:(id<LSMQTopicReceiveProtocol>)self topic:@"test"];
+//
+//
+//    [[LSMQMessageListManager shareInstance] addMsg:@"测试" topic:@"test"];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(20, 70, 100, 100)];
+    button.backgroundColor = [UIColor redColor];
+    [button addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
 }
 
+
+-(void)btnClick{
+    
+    [[LSRouter sharedRouter] open:@"TestViewController" animated:YES extraParams:@{@"key":@"value"} toCallback:^(NSDictionary *params) {
+        
+        NSLog(@"回调参数 %@",params);
+    }];
+
+    
+}
 
 -(void)topicReceive:(id)msg topic:(NSString*)topic{
     
