@@ -9,7 +9,7 @@ DEPENDENCIES:
   - LSKit (from `../`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - YYKit
 
 EXTERNAL SOURCES:
@@ -22,4 +22,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 77b245e5a829e73bf065b0a767321a59373a2fe3
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.2
