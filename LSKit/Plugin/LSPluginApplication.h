@@ -14,10 +14,17 @@
  */
 @interface LSPluginApplication : NSObject
 
-+ (BOOL)lsPluginApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
+/// App启动调动 需要手动管理Application
++ (BOOL)lsPluginApplication:(UIApplication *)application
+didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 
-+(UIInterfaceOrientationMask)lsPluginApplication:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window;
+/// 屏幕旋转调用 需要手动管理Application
++(UIInterfaceOrientationMask)lsPluginApplication:(UIApplication *)application
+         supportedInterfaceOrientationsForWindow:(UIWindow *)window;
 
+
+/// 初始化的组件管理器
 +(NSString*)initializeClass;
 
++(UIViewController*)rootViewController;
 @end

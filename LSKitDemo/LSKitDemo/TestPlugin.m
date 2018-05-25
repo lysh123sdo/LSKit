@@ -8,7 +8,7 @@
 
 #import "TestPlugin.h"
 
-@interface TestPlugin()<LSPluginDataSource>
+@interface TestPlugin()
 
 @end
 

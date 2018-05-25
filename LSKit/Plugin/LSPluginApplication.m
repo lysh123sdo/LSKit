@@ -7,15 +7,87 @@
 //
 
 #import "LSPluginApplication.h"
+#import "LSPlugin.h"
+#import "LSPluginManager.h"
+#import "LSRouter.h"
+
 @implementation LSPluginApplication
 
 
-+ (BOOL)lsPluginApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
++ (BOOL)lsPluginApplication:(UIApplication *)application
+didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
 
+    [self initPluginManager];
+    
+    UIWindow *window = application.keyWindow;
+    
+    UINavigationController *navigationController = (UINavigationController*)window.rootViewController;
+    
+    if (!navigationController) {
+        navigationController = (UINavigationController*)window.rootViewController.navigationController;
+    }
+    UIViewController *viewController = [self rootViewController];
+    
+    if (viewController) {
+        
+        if (!navigationController) {
+            navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+            window.rootViewController = navigationController;
+            [window makeKeyAndVisible];
+        }else{
+            [navigationController pushViewController:viewController animated:YES];
+        }
+    }
+    
+    if (navigationController) {
+        [[LSRouter sharedRouter] setNavigationController:navigationController];
+    }
+    
+    return YES;
+}
+
++(UIInterfaceOrientationMask)lsPluginApplication:(UIApplication *)application
+         supportedInterfaceOrientationsForWindow:(UIWindow *)window{
+    
+    NSInteger rotation = UIInterfaceOrientationMaskPortrait;
+    
+    Class cls = NSClassFromString([self initializeClass]);
+    
+    LSPluginManager *pluginManager = [cls shareInstance];
+    
+    NSString *viewControllerClass = [[LSRouter sharedRouter] topClass];
+    NSString *pluginId = [pluginManager topViewControllerPlugin:viewControllerClass];
+    LSPlugin *plugin = [pluginManager findRunningPluginByPluginId:pluginId];
+    
+    if (plugin && !plugin.isLibrary && [plugin respondsToSelector:@selector(pluginApplication:supportedInterfaceOrientationsForWindow:)]) {
+
+        id result = [plugin performSelector:@selector(pluginApplication:supportedInterfaceOrientationsForWindow:) withObject:application withObject:window];
+        
+        rotation = [result integerValue];
+    }
+    
+    return rotation;
+}
+
+
++(NSString*)initializeClass{
+    
+    return nil;
+}
+
+
++(UIViewController*)rootViewController{
+    
+    return nil;
+}
+
+
++(void)initPluginManager{
+    
     Class cls = NSClassFromString([self initializeClass]);
     
     if (!cls) {
-        return YES;
+        return;
     }
     
     SEL sel = NSSelectorFromString(@"shareInstance");
@@ -23,23 +95,11 @@
     IMP imp = [cls methodForSelector:sel];
     
     void (*func)(id, SEL) = (void *)imp;
-
+    
     func(cls,sel);
-
-    return YES;
 }
 
-+(UIInterfaceOrientationMask)lsPluginApplication:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window{
-    
-    
-    
-    
-    return 0;
-}
 
-+(NSString*)initializeClass{
-    
-    return nil;
-}
+
 
 @end

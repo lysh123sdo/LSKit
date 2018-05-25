@@ -8,7 +8,12 @@
 
 #import "LSPlugin.h"
 
+@interface LSPlugin()
+
+@end
+
 @implementation LSPlugin
+
 
 +(void)pluginRegisterRouters{
     
@@ -24,6 +29,10 @@
 -(void)pluginDealloc{
     
     
+}
+
+-(BOOL)isLibrary{
+    return YES;
 }
 
 -(NSString*)pluginName{

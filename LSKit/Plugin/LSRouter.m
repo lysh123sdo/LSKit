@@ -6,8 +6,8 @@
 //
 
 #import "LSRouter.h"
-#import <YYKit/YYkit.h>
-
+#import <YYKit/YYKit.h>
+#import "LSPluginManager.h"
 @interface LSRouterParams : NSObject
 
 @property (readwrite, nonatomic, strong) LSRouterOptions *routerOptions;
@@ -79,8 +79,10 @@
 
 
 @interface LSBaseRouter()
-
+/// 路由表
 @property (readwrite, nonatomic, strong) YYThreadSafeDictionary *routes;
+/// 通过路由打开的操作记录
+@property (readwrite, nonatomic, strong) YYThreadSafeDictionary *routesOpenCount;
 
 @end
 
@@ -89,6 +91,7 @@
 - (id)init {
     if ((self = [super init])) {
         self.routes = [YYThreadSafeDictionary dictionaryWithCapacity:0];
+        self.routesOpenCount = [YYThreadSafeDictionary dictionaryWithCapacity:0];
     }
     return self;
 }
@@ -97,7 +100,17 @@
     [self map:format toController:controllerClass withOptions:nil];
 }
 
-- (void)map:(NSString *)format toController:(Class)controllerClass withOptions:(LSRouterOptions *)options{
+
+/**
+ 注册一个控制器
+
+ @param format URL
+ @param controllerClass 绑定跳转的控制器
+ @param options 操作
+ */
+- (void)map:(NSString *)format
+toController:(Class)controllerClass
+withOptions:(LSRouterOptions *)options{
     
     if (!format) {
         @throw [NSException exceptionWithName:@"RouteNotProvided"
@@ -109,39 +122,61 @@
         options = [LSRouterOptions routerOptions];
     }
     options.openClass = controllerClass;
-    //TODO:补充保存
     [self.routes setObject:options forKey:format];
 }
 
+
+/**
+ 推出一个控制器
+
+ @param animated 是否动画 YES NO
+ @param url 回调参数URL
+ @param extraParams 回调的参数
+ */
 - (void)pop:(BOOL)animated format:(NSString*)url extraParams:(NSDictionary *)extraParams{
     
     LSRouterParams *params = [self routerParamsForUrl:url extraParams: extraParams];
     LSRouterOptions *option = params.routerOptions;
     
+    NSString *pluginId = option.pluginId;
+    
     if (option.callback) {
         option.callback(extraParams);
     }
     
-    [self popViewControllerFromRouterAnimated:animated];
+    NSString *className = [self popViewControllerReturnClassName:animated];
+    
+    if (pluginId) {
+        [self releaseRouterCount:className pluginId:pluginId];
+    }
 }
 
 - (void)pop:(BOOL)animated{
-    [self popViewControllerFromRouterAnimated:animated];
+    
+    [self popViewControllerReturnClassName:animated];
 }
 
-- (void)pop{
-    [self popViewControllerFromRouterAnimated:YES];
-}
-
-- (void)popViewControllerFromRouterAnimated:(BOOL)animated{
+-(NSString*)popViewControllerReturnClassName:(BOOL)animated{
+    
+    NSString *className;
+    
     if (self.navigationController.presentedViewController) {
+        
+        className = NSStringFromClass(self.navigationController.presentedViewController.class);
+        
         [self.navigationController dismissViewControllerAnimated:animated completion:nil];
     }
     else {
+        
+        className = NSStringFromClass(self.navigationController.viewControllers.lastObject.class);
+        
         [self.navigationController popViewControllerAnimated:animated];
     }
+    
+    return className;
 }
 
+/// 打开一个远程链接
 - (void)openExternal:(NSString *)url {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
@@ -150,33 +185,45 @@
     [self open:url animated:YES extraParams:nil toCallback:nil];
 }
 
+
+/**
+ 打开一个URL
+
+ @param url URL
+ @param animated 是否动画 YES NO
+ */
 - (void)open:(NSString *)url animated:(BOOL)animated{
     [self open:url animated:animated extraParams:nil toCallback:nil];
 }
 
+
+/**
+ 打开一个URL
+
+ @param url URL
+ @param animated 是否动画 YES NO
+ @param extraParams 参数
+ @param callback 回调
+ */
 - (void)open:(NSString *)url
     animated:(BOOL)animated
  extraParams:(NSDictionary *)extraParams
   toCallback:(LSRouterOpenCallback)callback
 {
+    
     LSRouterParams *params = [self routerParamsForUrl:url extraParams: extraParams];
     LSRouterOptions *options = params.routerOptions;
-
+    
     if (callback) {
         options.callback = callback;
         params.routerOptions = options;
-        //TODO:将值赋值给Router
     }
-
+    
     if (!self.navigationController) {
         return;
     }
 
-    UIViewController *controller = [self controllerForRouterParams:params];
-
-    if (!controller) {
-        return;
-    }
+    UIViewController *controller = [self viewController:params];
     
     if (self.navigationController.presentedViewController) {
         [self.navigationController dismissViewControllerAnimated:animated completion:nil];
@@ -203,6 +250,54 @@
     else {
         [self.navigationController pushViewController:controller animated:animated];
     }
+}
+
+/**
+ 通过URL获取一个对象
+ 
+ @param url URL
+ @param extraParams 参数
+ @return 需要获取的对象 未获取到返回nil
+ */
+-(UIViewController*)open:(NSString*)url extraParams:(NSDictionary *)extraParams{
+    
+    LSRouterParams *params = [self routerParamsForUrl:url extraParams: extraParams];
+
+    UIViewController *controller = [self viewController:params];
+    
+    return controller;
+}
+
+/**
+ 获取一个控制器
+
+ @param params 参数
+ @return 控制器
+ */
+-(UIViewController*)viewController:(LSRouterParams *)params{
+    
+    NSString *pluginId = params.routerOptions.pluginId;
+    
+    if (pluginId) {
+        //判断组件是否已经启动
+        BOOL running = [[LSPluginManager shareInstance] pluginIsRunning:pluginId];
+        if (!running) {
+            return nil;
+        }
+    }
+   
+    UIViewController *controller = [self controllerForRouterParams:params];
+    
+    if (!controller) {
+        return nil;
+    }
+    
+    if (pluginId) {
+        //统计通过路由打开组件的类名
+        [self countRouter:NSStringFromClass(controller.class) pluginId:pluginId];
+    }
+    
+    return controller;
 }
 
 - (UIViewController *)controllerForRouterParams:(LSRouterParams *)params {
@@ -288,6 +383,90 @@
     return params;
 }
 
+
+/**
+ 只对有组件的操作进行保存
+ 统计打开的组件类名的次数
+
+ @param className 打开的类名
+ @param pluginId 组件
+ */
+-(void)countRouter:(NSString*)className pluginId:(NSString*)pluginId{
+    
+    NSMutableDictionary *openClass = [NSMutableDictionary dictionaryWithDictionary:[self.routesOpenCount objectForKey:pluginId]];
+    NSInteger count = [[openClass objectForKey:className] integerValue];
+    count++;
+    [openClass setValue:@(count) forKey:className];
+    [self.routesOpenCount setValue:openClass forKey:pluginId];
+}
+
+
+/**
+ 减少组件统计数
+
+ @param className 类名
+ @param pluginId 组件ID
+ */
+-(void)releaseRouterCount:(NSString*)className pluginId:(NSString*)pluginId{
+    
+    NSMutableDictionary *openClass = [NSMutableDictionary dictionaryWithDictionary:[self.routesOpenCount objectForKey:pluginId]];
+    
+    if (openClass.count <= 0) {
+        return;
+    }
+    
+    NSInteger count = [[openClass objectForKey:className] integerValue];
+    count--;
+    
+    if (count <= 0) {
+        count = 0;
+    }
+    
+    [openClass setValue:@(count) forKey:className];
+    
+    BOOL isRunning = [self pluginIsRunning:openClass];
+    
+    if (!isRunning) {
+        
+        [self releasePlugin:pluginId];
+    }
+}
+
+/// 组件是否在运行
+-(BOOL)pluginIsRunning:(NSDictionary*)openClass{
+    
+    __block BOOL result = NO;
+    
+    [openClass enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+       
+        NSInteger count = [obj integerValue];
+        
+        if (count > 0) {
+            result = YES;
+            *stop = YES;
+        }
+        
+    }];
+    
+    return result;
+}
+
+
+/// 关闭组件运行
+-(void)releasePlugin:(NSString*)pluginId{
+    [[LSPluginManager shareInstance] stopRunningPluginByPluginId:pluginId];
+}
+
+-(NSString*)topClass{
+    
+    UIViewController *viewController = self.navigationController.visibleViewController;
+    
+    if ([viewController isKindOfClass:[UINavigationController class]]) {
+        viewController = ((UINavigationController*)viewController).viewControllers.firstObject;
+    }
+    
+    return NSStringFromClass(viewController.class);
+}
 
 @end
 

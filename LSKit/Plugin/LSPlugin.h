@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #ifdef DEBUG
 #define LSPluginLog(frmt, ...) NSLog((frmt),##__VA_ARGS__)
@@ -26,8 +27,17 @@
 -(void)pluginInit;
 /// 释放注销组件
 -(void)pluginDealloc;
+
+/// 注册的控制器--将所有与该组件相关联的控制器注册
+-(NSArray*)registerViewControllers;
+
 /// 类被注册到组件管理器中,只有在注册时候会调用一次
 +(void)pluginInitialize;
+
+/// 组件被注销的时候调用，调用一次
++(void)pluginUnInitialize;
+
+
 
 @end
 
@@ -35,17 +45,18 @@
 
 #pragma mark - App生命周期代理
 /// 启动App
-+ (BOOL)pluginApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
+- (BOOL)pluginApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 ///  横竖屏
-+(UIInterfaceOrientationMask)pluginApplication:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window;
+- (id)pluginApplication:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window;
 
 @end
 
-
 /**
- 组件资源
+ 组件
  */
-@protocol LSPluginDataSource<NSObject>
+@interface LSPlugin : NSObject
+
+@property (nonatomic , assign , readonly) BOOL isTop;
 
 /// 组件名
 -(NSString*)pluginName;
@@ -53,13 +64,8 @@
 /// 组件ID
 -(NSString*)pluginId;
 
-@end
-
-
-/**
- 组件
- */
-@interface LSPlugin : NSObject
+/// 是否lib库
+-(BOOL)isLibrary;
 
 /// 开始启动
 -(void)start;
