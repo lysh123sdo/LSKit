@@ -35,4 +35,7 @@
  */
 - (void)saveImageWithPath:(NSString *)path;
 
+/// 重绘图片颜色
+- (UIImage *)imageWithColor:(UIColor *)color;
+
 @end
