@@ -11,6 +11,8 @@
 
 @interface NSString (LS)
 
++(void)test;
+
 /**
  *  对字符串进行MD5加密
  *

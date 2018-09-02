@@ -18,10 +18,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[LSRouter sharedRouter] setNavigationController:self.navigationController];
+    NSString *url = @"测试 2018-12-1 abc";
     
-    [[LSRouter sharedRouter] map:@"TestViewController" toController:NSClassFromString(@"TestViewController")];
-    
+    NSString *urlCode = [url urlEncodedString];
+    NSLog(@"%@",urlCode);
+    NSLog(@"%@",[urlCode urlDecodedString]);
+//    [[LSRouter sharedRouter] setNavigationController:self.navigationController];
+//
+//    [[LSRouter sharedRouter] map:@"TestViewController" toController:NSClassFromString(@"TestViewController")];
+//
 //    [[LSMQMessageListManager shareInstance] addTopic:(id<LSMQTopicReceiveProtocol>)self topic:@"test"];
 //
 //

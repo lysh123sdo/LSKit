@@ -11,6 +11,12 @@
 
 @implementation NSString (LS)
 
+
++(void)test{
+    
+    NSArray *a = @[];
+    [a objectAtIndex:1];
+}
 /**
  *  对字符串进行MD5加密
  *
@@ -32,30 +38,65 @@
 
 - (NSString*) urlEncodedString {
     
-    CFStringRef encodedCFString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-                                                                          (__bridge CFStringRef) self,
-                                                                          nil,
-                                                                          CFSTR("?!@#$^&%*+,:;='\"`<>()[]{}/\\| "),
-                                                                          kCFStringEncodingUTF8);
-    
-    NSString *encodedString = [[NSString alloc] initWithString:(__bridge_transfer NSString*) encodedCFString];
-    
-    if(!encodedString)
-        encodedString = @"";
-    
-    return encodedString;
+    if ([self respondsToSelector:@selector(stringByAddingPercentEncodingWithAllowedCharacters:)]) {
+        
+        static NSString * const kAFCharactersGeneralDelimitersToEncode = @":#[]@"; // does not include "?" or "/" due to RFC 3986 - Section 3.4
+        static NSString * const kAFCharactersSubDelimitersToEncode = @"!$&'()*+,;=";
+        
+        NSMutableCharacterSet * allowedCharacterSet = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
+        [allowedCharacterSet removeCharactersInString:[kAFCharactersGeneralDelimitersToEncode stringByAppendingString:kAFCharactersSubDelimitersToEncode]];
+        static NSUInteger const batchSize = 50;
+        
+        NSUInteger index = 0;
+        NSMutableString *escaped = @"".mutableCopy;
+        
+        while (index < self.length) {
+            NSUInteger length = MIN(self.length - index, batchSize);
+            NSRange range = NSMakeRange(index, length);
+           
+            range = [self rangeOfComposedCharacterSequencesForRange:range];
+            NSString *substring = [self substringWithRange:range];
+            NSString *encoded = [substring stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
+            [escaped appendString:encoded];
+            
+            index += range.length;
+        }
+        return escaped;
+    } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        CFStringEncoding cfEncoding = CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding);
+        NSString *encoded = (__bridge_transfer NSString *)
+        CFURLCreateStringByAddingPercentEscapes(
+                                                kCFAllocatorDefault,
+                                                (__bridge CFStringRef)self,
+                                                NULL,
+                                                CFSTR("!#$&'()*+,/:;=?@[]"),
+                                                cfEncoding);
+        return encoded;
+#pragma clang diagnostic pop
+    }
 }
 
 - (NSString*) urlDecodedString {
     
-    CFStringRef decodedCFString = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
-                                                                                          (__bridge CFStringRef) self,
-                                                                                          CFSTR(""),
-                                                                                          kCFStringEncodingUTF8);
-    
-    // We need to replace "+" with " " because the CF method above doesn't do it
-    NSString *decodedString = [[NSString alloc] initWithString:(__bridge_transfer NSString*) decodedCFString];
-    return (!decodedString) ? @"" : [decodedString stringByReplacingOccurrencesOfString:@"+" withString:@" "];
+    if ([self respondsToSelector:@selector(stringByRemovingPercentEncoding)]) {
+        return [self stringByRemovingPercentEncoding];
+    } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        CFStringEncoding en = CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding);
+        NSString *decoded = [self stringByReplacingOccurrencesOfString:@"+"
+                                                            withString:@" "];
+        decoded = (__bridge_transfer NSString *)
+        CFURLCreateStringByReplacingPercentEscapesUsingEncoding(
+                                                                NULL,
+                                                                (__bridge CFStringRef)decoded,
+                                                                CFSTR(""),
+                                                                en);
+        return decoded;
+#pragma clang diagnostic pop
+    }
 }
 
 /**
