@@ -1,5 +1,30 @@
 PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
+  - CocoaLumberjack (3.3.0):
+    - CocoaLumberjack/Default (= 3.3.0)
+    - CocoaLumberjack/Extensions (= 3.3.0)
+  - CocoaLumberjack/Default (3.3.0)
+  - CocoaLumberjack/Extensions (3.3.0):
+    - CocoaLumberjack/Default
+  - JTObjectMapping (1.1.2)
   - LSKit (0.0.1):
+    - AFNetworking
+    - CocoaLumberjack (~> 3.3.0)
+    - JTObjectMapping (~> 1.1.2)
     - YYKit (~> 1.0.9)
   - YYKit (1.0.9):
     - YYKit/no-arc (= 1.0.9)
@@ -9,7 +34,10 @@ DEPENDENCIES:
   - LSKit (from `../`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - CocoaLumberjack
+    - JTObjectMapping
     - YYKit
 
 EXTERNAL SOURCES:
@@ -17,9 +45,12 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LSKit: 2887714eb04e90daf7a4090424f0b47fc1bc7ccf
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  CocoaLumberjack: 3c8c74683302f9012bb168e1c4b7ae3c0b558431
+  JTObjectMapping: 179cae6acadb27be5b7f5c019c216cb99d28e112
+  LSKit: 7afc9ef188a88d4bf0963b19d8188bb30f369b67
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
 PODFILE CHECKSUM: 77b245e5a829e73bf065b0a767321a59373a2fe3
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3

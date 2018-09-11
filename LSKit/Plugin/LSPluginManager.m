@@ -20,6 +20,8 @@
 /// 正在运行的组件
 @property (nonatomic , strong) YYThreadSafeDictionary *runningPlugins;
 
+@property (nonatomic , strong) YYThreadSafeDictionary *blankClassList;
+
 @end
 
 @implementation LSPluginManager
@@ -58,6 +60,8 @@ static dispatch_once_t _onceToken;
     _plugins = [YYThreadSafeDictionary dictionaryWithCapacity:0];
     _runningPlugins = [YYThreadSafeDictionary dictionaryWithCapacity:0];
     _pluginClasses = [YYThreadSafeDictionary dictionaryWithCapacity:0];
+    _blankClassList = [YYThreadSafeDictionary dictionaryWithCapacity:0];
+    
 }
 
 
@@ -68,6 +72,20 @@ static dispatch_once_t _onceToken;
     }
 }
 
+
+-(void)existApp{
+    
+    NSArray *runningKeys = [self.runningPlugins allKeys];
+    
+    for (NSString *pluginId in runningKeys) {
+        
+        [self stopRunningPluginByPluginId:pluginId];
+    }
+    
+    [self.runningPlugins removeAllObjects];
+    [self.plugins removeAllObjects];
+    [self.pluginClasses removeAllObjects];
+}
 
 /**
  将组件注册到注册列表
@@ -97,9 +115,24 @@ static dispatch_once_t _onceToken;
         [cls performSelector:@selector(pluginInitialize)];
     }
     
+    //获取组件所有的控制器 lib库不注册控制器
+    if ([cls respondsToSelector:@selector(registerViewControllers)]) {
+        NSArray* viewControllers= [cls registerViewControllers];
+        [self.pluginClasses setValue:viewControllers forKey:pluginId];
+    }
+    
     [_plugins setValue:pluginClass forKey:pluginId];
     
     return YES;
+}
+
+/// 添加黑名单
+-(void)addBlankList:(NSString*)pluginId clssess:(NSArray*)classes{
+    
+    if ([classes isKindOfClass:[NSArray class]]) {
+        [self.blankClassList setValue:classes forKey:pluginId];
+    }
+    
 }
 
 
@@ -126,10 +159,8 @@ static dispatch_once_t _onceToken;
         return NO;
     }
     
-    //获取组件所有的控制器 lib库不注册控制器
-    if (!plugin.isLibrary && [plugin respondsToSelector:@selector(registerViewControllers)]) {
-        NSArray* viewControllers= [plugin performSelector:@selector(registerViewControllers)];
-        [self.pluginClasses setValue:viewControllers forKey:pluginId];
+    if ([plugin respondsToSelector:@selector(pluginInit)]) {
+        [plugin pluginInit];
     }
     
     [_runningPlugins setValue:plugin forKey:pluginId];
@@ -172,6 +203,11 @@ static dispatch_once_t _onceToken;
     }
     
     LSPlugin *plugin = [self.runningPlugins objectForKey:pluginId];
+    
+    if ([plugin respondsToSelector:@selector(pluginDealloc)]) {
+        [plugin pluginDealloc];
+    }
+    
     [plugin stop];
     
     [self.pluginClasses removeObjectForKey:pluginId];
@@ -180,13 +216,20 @@ static dispatch_once_t _onceToken;
 
 
 /// 组件是否已经运行
--(BOOL)pluginIsRunning:(NSString*)pluginId{
-    
+-(BOOL)pluginIsRunning:(NSString*)pluginId className:(NSString*)className{
+   
     //是否注册
     BOOL isInRegister = [self isInRegisterList:pluginId];
     if (!isInRegister) {
         return NO;
     }
+    
+    // 过滤器
+    BOOL isFliterOk = [self fliterClass:pluginId className:className];
+    if (!isFliterOk) {
+        return NO;
+    }
+    
     
     //是否已经运行
     BOOL isInRunningList = [self isInRunningList:pluginId];
@@ -220,6 +263,28 @@ static dispatch_once_t _onceToken;
     }
     
     return [self.runningPlugins objectForKey:pluginId];
+}
+
+///通过class找组件ID
+-(id)findPluginByClassName:(NSString*)className{
+    
+    NSArray *plugins = [self.pluginClasses allKeys];
+    for (int i = 0 ; i < plugins.count; i++) {
+        
+        NSString *key = [plugins objectAtIndex:i];
+        
+        NSArray *pluginClass = [self.pluginClasses objectForKey:key];
+        
+        for (NSString *cls in pluginClass) {
+            
+            if ([className isEqualToString:cls]) {
+                return key;
+            }
+        }
+        
+    }
+    
+    return nil;
 }
 
 -(NSArray*)runningPlugin{
@@ -312,5 +377,58 @@ static dispatch_once_t _onceToken;
     }
     
     return nil;
+}
+
+/// 是否需要关闭组件
+-(BOOL)sholdStopRunningPlugin:(NSArray*)navViewController{
+    
+    for (UIViewController *viewController in navViewController) {
+        
+        if (![viewController.class isKindOfClass:[UINavigationController class]]) {
+            
+            NSString *className = NSStringFromClass(viewController.class);
+            
+            NSString *pluginId = [self findPluginByClassName:className];
+            
+            if (pluginId) {
+                return NO;
+            }
+        }else{
+            
+            NSArray *childViewControllers = ((UINavigationController*)viewController).viewControllers;
+            
+            BOOL value = [self sholdStopRunningPlugin:childViewControllers];
+            
+            if (NO) {
+                return value;
+            }
+        }
+        
+    }
+    
+    
+    return YES;
+}
+
+//// 过滤器 黑名单
+-(BOOL)fliterClass:(NSString*)pluginId className:(NSString*)className{
+    
+    
+    NSArray *keys = [self.blankClassList allKeys];
+    
+    for (NSString *key in keys) {
+        
+        NSArray *list = [self.blankClassList objectForKey:key];
+        
+        for (NSString *cls in list) {
+            
+            if ([className isEqualToString:cls]) {
+                return NO;
+            }
+            
+        }
+    }
+    
+    return YES;
 }
 @end

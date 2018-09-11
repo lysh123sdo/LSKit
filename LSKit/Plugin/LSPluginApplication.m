@@ -15,34 +15,33 @@
 
 
 + (BOOL)lsPluginApplication:(UIApplication *)application
-didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+                     window:(UIWindow*)window{
 
     [self initPluginManager];
-    
-    UIWindow *window = application.keyWindow;
-    
+ 
     UINavigationController *navigationController = (UINavigationController*)window.rootViewController;
     
-    if (!navigationController) {
+    if (![navigationController isKindOfClass:[UINavigationController class]]) {
         navigationController = (UINavigationController*)window.rootViewController.navigationController;
     }
     UIViewController *viewController = [self rootViewController];
     
     if (viewController) {
         
-        if (!navigationController) {
-            navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-            window.rootViewController = navigationController;
-            [window makeKeyAndVisible];
-        }else{
-            [navigationController pushViewController:viewController animated:YES];
-        }
+        navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+        window.rootViewController = navigationController;
+        [window makeKeyAndVisible];
+//        else{
+//            [navigationController pushViewController:viewController animated:YES];
+//        }
     }
+    
     
     if (navigationController) {
         [[LSRouter sharedRouter] setNavigationController:navigationController];
     }
-    
+    [self initializeOk];
     return YES;
 }
 
@@ -69,6 +68,10 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     return rotation;
 }
 
++(void)initializeOk{
+    
+    
+}
 
 +(NSString*)initializeClass{
     
@@ -80,7 +83,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     
     return nil;
 }
-
 
 +(void)initPluginManager{
     

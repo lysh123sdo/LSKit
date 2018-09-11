@@ -29,7 +29,7 @@
 -(void)pluginDealloc;
 
 /// 注册的控制器--将所有与该组件相关联的控制器注册
--(NSArray*)registerViewControllers;
++(NSArray*)registerViewControllers;
 
 /// 类被注册到组件管理器中,只有在注册时候会调用一次
 +(void)pluginInitialize;
@@ -54,7 +54,7 @@
 /**
  组件
  */
-@interface LSPlugin : NSObject
+@interface LSPlugin : NSObject<LSPluginDelegate>
 
 @property (nonatomic , assign , readonly) BOOL isTop;
 

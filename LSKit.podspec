@@ -24,6 +24,10 @@ Pod::Spec.new do |s|
   s.source_files  = "LSKit/**/*.{h,m}"
   s.source           = { :git => 'https://github.com/lysh123sdo/LSKit.git', :tag => s.version.to_s}
   s.requires_arc = true
+  
+  s.dependency 'CocoaLumberjack', '~> 3.3.0'
   s.dependency 'YYKit', '~> 1.0.9'
+  s.dependency 'AFNetworking'
+  s.dependency 'JTObjectMapping', '~> 1.1.2'
   
 end

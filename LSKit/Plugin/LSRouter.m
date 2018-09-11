@@ -8,81 +8,30 @@
 #import "LSRouter.h"
 #import <YYKit/YYKit.h>
 #import "LSPluginManager.h"
-@interface LSRouterParams : NSObject
+#import "LSRouterParams.h"
+#import "NSString+LS.h"
+#import "LSRouterFliter.h"
 
-@property (readwrite, nonatomic, strong) LSRouterOptions *routerOptions;
-@property (readwrite, nonatomic, strong) NSDictionary *openParams;
-@property (readwrite, nonatomic, strong) NSDictionary *extraParams;
-@property (readwrite, nonatomic, strong) NSDictionary *controllerParams;
-
-@end
-
-@implementation LSRouterParams
-
-- (instancetype)initWithRouterOptions: (LSRouterOptions *)routerOptions openParams: (NSDictionary *)openParams extraParams: (NSDictionary *)extraParams{
-    [self setRouterOptions:routerOptions];
-    [self setExtraParams: extraParams];
-    [self setOpenParams:openParams];
-    return self;
-}
-
-- (NSDictionary *)controllerParams {
-    NSMutableDictionary *controllerParams = [NSMutableDictionary dictionaryWithDictionary:self.routerOptions.defaultParams];
-    [controllerParams addEntriesFromDictionary:self.extraParams];
-    [controllerParams addEntriesFromDictionary:self.openParams];
-    return controllerParams;
-}
-
-- (NSDictionary *)getControllerParams {
-    return [self controllerParams];
-}
-@end
-
-
-@interface LSRouterOptions()
-
-
-@property (readwrite, nonatomic, strong) Class openClass;
-@property (readwrite, nonatomic, copy) LSRouterOpenCallback callback;
-
-@end
-
-@implementation LSRouterOptions
-
-+ (instancetype)routerOptionsWithPresentationStyle: (UIModalPresentationStyle)presentationStyle
-                                   transitionStyle: (UIModalTransitionStyle)transitionStyle
-                                     defaultParams: (NSDictionary *)defaultParams
-                                            isRoot: (BOOL)isRoot
-                                           isModal: (BOOL)isModal{
+typedef NS_ENUM(NSInteger , LSRouterOpenUrlType){
     
-    LSRouterOptions *option = [LSRouterOptions new];
+    LSRouterOpenUrlType_Unkown, //未知
+    LSRouterOpenUrlType_Router, //自定义路由
+    LSRouterOpenUrlType_Url, //网络地址
+    LSRouterOpenUrlType_Scheme,//App跳转
     
-    option.presentationStyle = presentationStyle;
-    option.transitionStyle = transitionStyle;
-    option.defaultParams = defaultParams;
-    option.shouldOpenAsRootViewController = isRoot;
-    option.modal = isModal;
-    
-    return option;
-}
-
-
-+ (instancetype)routerOptions {
-    return [self routerOptionsWithPresentationStyle:UIModalPresentationNone
-                                    transitionStyle:UIModalTransitionStyleCoverVertical
-                                      defaultParams:nil
-                                             isRoot:NO
-                                            isModal:NO];
-}
-
-@end
-
+};
 
 @interface LSBaseRouter()
 /// 路由表
 @property (readwrite, nonatomic, strong) YYThreadSafeDictionary *routes;
-/// 通过路由打开的操作记录
-@property (readwrite, nonatomic, strong) YYThreadSafeDictionary *routesOpenCount;
+/// http flag 打开网页标记
+@property (readwrite, nonatomic , strong) NSString *httpRegex;
+/// 路由fag 打开组件sdk标记
+@property (readwrite, nonatomic , strong) NSString *pluginRegex;
+
+@property (readwrite, nonatomic , strong) NSString *schemeRegex;
+
+@property (readwrite, nonatomic , strong) LSRouterFliter *filter;
 
 @end
 
@@ -91,7 +40,9 @@
 - (id)init {
     if ((self = [super init])) {
         self.routes = [YYThreadSafeDictionary dictionaryWithCapacity:0];
-        self.routesOpenCount = [YYThreadSafeDictionary dictionaryWithCapacity:0];
+        self.httpRegex = @"^http[s]{0,1}://";
+        self.pluginRegex = @"^router://";
+        self.schemeRegex = [NSString stringWithFormat:@"^[a-zA-Z]*://"];
     }
     return self;
 }
@@ -108,9 +59,7 @@
  @param controllerClass 绑定跳转的控制器
  @param options 操作
  */
-- (void)map:(NSString *)format
-toController:(Class)controllerClass
-withOptions:(LSRouterOptions *)options{
+- (void)map:(NSString *)format toController:(Class)controllerClass withOptions:(LSRouterOptions *)options{
     
     if (!format) {
         @throw [NSException exceptionWithName:@"RouteNotProvided"
@@ -122,6 +71,7 @@ withOptions:(LSRouterOptions *)options{
         options = [LSRouterOptions routerOptions];
     }
     options.openClass = controllerClass;
+    
     [self.routes setObject:options forKey:format];
 }
 
@@ -137,18 +87,85 @@ withOptions:(LSRouterOptions *)options{
     
     LSRouterParams *params = [self routerParamsForUrl:url extraParams: extraParams];
     LSRouterOptions *option = params.routerOptions;
+
+    UIViewController *tempViewController;
+    BOOL isBreak = NO;
     
-    NSString *pluginId = option.pluginId;
+    for (NSInteger i = self.navigationController.viewControllers.count - 1; i>= 0 ; i--) {
+        
+        UIViewController *viewController = [self.navigationController.viewControllers objectAtIndex:i];
+        
+        if (isBreak) {
+            tempViewController = viewController;
+            break;
+        }
+        
+        if ([viewController isKindOfClass:option.openClass]) {
+            isBreak = YES;
+        }
+    }
     
+    if (tempViewController && isBreak) {
+        [self.navigationController popToViewController:tempViewController animated:YES];
+    }else{
+        [self popViewControllerReturnClassName:animated];
+    }
+   
     if (option.callback) {
         option.callback(extraParams);
     }
     
-    NSString *className = [self popViewControllerReturnClassName:animated];
+    BOOL should = [[LSPluginManager shareInstance] sholdStopRunningPlugin:self.navigationController.viewControllers];
     
-    if (pluginId) {
-        [self releaseRouterCount:className pluginId:pluginId];
+    if (should) {
+        
+        NSString *pluginId = [[LSPluginManager shareInstance] findPluginByClassName:params.className];
+        
+        [[LSPluginManager shareInstance] stopRunningPluginByPluginId:pluginId];
     }
+}
+
+
+/**
+ 跳转到制定控制器 并且给该制定控制器传数据
+
+ @param animated YES NO
+ @param url URL
+ @param extraParams 传递给制定控制器的参数
+ */
+- (void)popToViewController:(BOOL)animated
+                     format:(NSString*)url
+                extraParams:(NSDictionary *)extraParams{
+    
+    LSRouterParams *params = [self routerParamsForUrl:url extraParams: extraParams];
+
+    Class pluginClass = params.routerOptions.openClass;
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    if (self.navigationController.presentationController) {
+        [self.navigationController dismissViewControllerAnimated:animated completion:nil];
+    }
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if ([viewController isKindOfClass:pluginClass]) {
+          
+            SEL popSel = sel_registerName("routerPopExtraParameters:");
+            
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            if ([viewController respondsToSelector:popSel]) {
+                [viewController performSelector:popSel withObject:extraParams];
+            }
+            
+            [self.navigationController popToViewController:viewController animated:animated];
+            
+            return;
+            
+        }
+        
+    }
+    
 }
 
 - (void)pop:(BOOL)animated{
@@ -160,17 +177,31 @@ withOptions:(LSRouterOptions *)options{
     
     NSString *className;
     
-    if (self.navigationController.presentedViewController) {
+    UINavigationController *controller = self.navigationController;
+    
+    if (controller.presentedViewController) {
         
-        className = NSStringFromClass(self.navigationController.presentedViewController.class);
+        className = NSStringFromClass(controller.presentedViewController.class);
         
-        [self.navigationController dismissViewControllerAnimated:animated completion:nil];
+        if ([controller.presentedViewController isKindOfClass:[UINavigationController class]]){
+            controller = (UINavigationController*)controller.presentedViewController;
+            
+            if (controller.viewControllers.count >=2 ) {
+                [controller popViewControllerAnimated:animated];
+            }else{
+                [controller dismissViewControllerAnimated:animated completion:nil];
+            }
+            
+        }else{
+            [controller dismissViewControllerAnimated:animated completion:nil];
+        }
+        
     }
     else {
         
         className = NSStringFromClass(self.navigationController.viewControllers.lastObject.class);
         
-        [self.navigationController popViewControllerAnimated:animated];
+        [controller popViewControllerAnimated:animated];
     }
     
     return className;
@@ -210,45 +241,83 @@ withOptions:(LSRouterOptions *)options{
  extraParams:(NSDictionary *)extraParams
   toCallback:(LSRouterOpenCallback)callback
 {
-    
-    LSRouterParams *params = [self routerParamsForUrl:url extraParams: extraParams];
-    LSRouterOptions *options = params.routerOptions;
-    
-    if (callback) {
-        options.callback = callback;
-        params.routerOptions = options;
-    }
-    
+ 
     if (!self.navigationController) {
         return;
     }
+    
+    LSRouterParams *params = [self routerParamsForUrl:url extraParams:extraParams];
+    LSRouterOptions *options = params.routerOptions;
+    options.callback = callback;
+    params.routerOptions = options;
+    params.animated = animated;
+    params.routerUrl = url;
+    
+    params = [self routerBeforeFilter:params];
+    
+    [self openControllerByParameters:params];
+}
 
+-(void)releaseFilter{
+    
+    self.filter = nil;
+}
+
+-(void)openControllerByParameters:(LSRouterParams*)params{
+    
     UIViewController *controller = [self viewController:params];
+   
+    if (!controller) {
+        return;
+    }
+    
+    BOOL animated = params.animated;
+    
+    LSRouterOptions *options = params.routerOptions;
+    
+    if (controller) {
+        
+        NSString *pluginId = [[LSPluginManager shareInstance] findPluginByClassName:NSStringFromClass(options.openClass)];
+       
+        BOOL should = [[LSPluginManager shareInstance] pluginIsRunning:pluginId className:params.routerOptions.className];
+        
+        if (!should) {
+            return;
+        }
+    }
+    
+    UINavigationController *navController = self.navigationController;
     
     if (self.navigationController.presentedViewController) {
-        [self.navigationController dismissViewControllerAnimated:animated completion:nil];
+        
+        if ([self.navigationController.presentedViewController isKindOfClass:[UINavigationController class]]) {
+            navController = (UINavigationController*)self.navigationController.presentedViewController;
+        }else{
+            [self.navigationController dismissViewControllerAnimated:animated completion:nil];
+        }
     }
-
+    
     if ([options isModal]) {
         if ([controller.class isSubclassOfClass:UINavigationController.class]) {
-            [self.navigationController presentViewController:controller
-                                                    animated:animated
-                                                  completion:nil];
+            [navController presentViewController:controller
+                                        animated:animated
+                                      completion:nil];
         }
         else {
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
             navigationController.modalPresentationStyle = controller.modalPresentationStyle;
             navigationController.modalTransitionStyle = controller.modalTransitionStyle;
-            [self.navigationController presentViewController:navigationController
-                                                    animated:animated
-                                                  completion:nil];
+            [navController presentViewController:navigationController
+                                        animated:animated
+                                      completion:nil];
         }
     }
+    
     else if (options.shouldOpenAsRootViewController) {
-        [self.navigationController setViewControllers:@[controller] animated:animated];
+        [navController setViewControllers:@[controller] animated:animated];
     }
     else {
-        [self.navigationController pushViewController:controller animated:animated];
+        [navController pushViewController:controller animated:animated];
     }
 }
 
@@ -259,7 +328,7 @@ withOptions:(LSRouterOptions *)options{
  @param extraParams 参数
  @return 需要获取的对象 未获取到返回nil
  */
--(UIViewController*)open:(NSString*)url extraParams:(NSDictionary *)extraParams{
+-(UIViewController*)openViewController:(NSString*)url extraParams:(NSDictionary *)extraParams{
     
     LSRouterParams *params = [self routerParamsForUrl:url extraParams: extraParams];
 
@@ -276,51 +345,43 @@ withOptions:(LSRouterOptions *)options{
  */
 -(UIViewController*)viewController:(LSRouterParams *)params{
     
-    NSString *pluginId = params.routerOptions.pluginId;
     
+    NSString *className = NSStringFromClass(params.routerOptions.openClass);
+    
+    NSString *pluginId = [[LSPluginManager shareInstance] findPluginByClassName:className];
+  
     if (pluginId) {
         //判断组件是否已经启动
-        BOOL running = [[LSPluginManager shareInstance] pluginIsRunning:pluginId];
+        BOOL running = [[LSPluginManager shareInstance] pluginIsRunning:pluginId className:NSStringFromClass(params.routerOptions.openClass)];
         if (!running) {
             return nil;
         }
     }
    
     UIViewController *controller = [self controllerForRouterParams:params];
-    
     if (!controller) {
         return nil;
     }
-    
-    if (pluginId) {
-        //统计通过路由打开组件的类名
-        [self countRouter:NSStringFromClass(controller.class) pluginId:pluginId];
-    }
-    
+   
     return controller;
 }
 
 - (UIViewController *)controllerForRouterParams:(LSRouterParams *)params {
     
     SEL CONTROLLER_CLASS_SELECTOR = sel_registerName("allocWithRouterParamsWithParams:");
-    SEL CONTROLLER_CLASS_SELECTOR_Swift = sel_registerName("allocWithRouterParamsWithParams:");
     SEL CONTROLLER_SELECTOR = sel_registerName("initWithRouterParams:");
-    SEL CONTROLLER_SELECTOR_SWift = sel_registerName("initWithRouterParamsWithParams:");
-    
+
     UIViewController *controller = nil;
     Class controllerClass = params.routerOptions.openClass;
-    
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+
     if ([controllerClass respondsToSelector:CONTROLLER_CLASS_SELECTOR]) {
-        controller = [controllerClass performSelector:CONTROLLER_CLASS_SELECTOR withObject:[params controllerParams]];
-    }
-    else if ([params.routerOptions.openClass instancesRespondToSelector:CONTROLLER_SELECTOR]) {
-        controller = [[params.routerOptions.openClass alloc] performSelector:CONTROLLER_SELECTOR withObject:[params controllerParams]];
-    }else if ([params.routerOptions.openClass instancesRespondToSelector:CONTROLLER_SELECTOR_SWift]) {
-        controller = [[params.routerOptions.openClass alloc] performSelector:CONTROLLER_SELECTOR_SWift withObject:[params controllerParams]];
-    }else if ([controllerClass respondsToSelector:CONTROLLER_CLASS_SELECTOR_Swift]) {
-        controller = [controllerClass performSelector:CONTROLLER_CLASS_SELECTOR_Swift withObject:[params controllerParams]];
+ 
+        controller = [controllerClass allocWithRouterParamsWithParams:[params controllerParams]];
+  
+    }else if ([params.routerOptions.openClass instancesRespondToSelector:CONTROLLER_SELECTOR]) {
+        controller = [[params.routerOptions.openClass alloc] initWithRouterParams:[params controllerParams]];
+    }else{
+        controller = [[params.routerOptions.openClass alloc] init];
     }
 #pragma clang diagnostic pop
     if (!controller) {
@@ -344,15 +405,13 @@ withOptions:(LSRouterOptions *)options{
 
     [self.routes enumerateKeysAndObjectsUsingBlock:
      ^(NSString *routerUrl, LSRouterOptions *routerOptions, BOOL *stop) {
-
+         
          NSArray *routerParts = [routerUrl pathComponents];
-         if ([routerParts count] == [givenParts count]) {
+         if ([url hasPrefix:routerUrl]) {
 
              NSDictionary *givenParams = [self paramsForUrlComponents:givenParts routerUrlComponents:routerParts];
-             if (givenParams) {
-                 openParams = [[LSRouterParams alloc] initWithRouterOptions:routerOptions openParams:givenParams extraParams: extraParams];
-                 *stop = YES;
-             }
+             openParams = [[LSRouterParams alloc] initWithRouterOptions:routerOptions openParams:givenParams extraParams: extraParams];
+             *stop = YES;
          }
      }];
 
@@ -383,74 +442,64 @@ withOptions:(LSRouterOptions *)options{
     return params;
 }
 
+/// 匹配URL类型
+-(NSInteger)routerUrl:(NSString*)url{
 
-/**
- 只对有组件的操作进行保存
- 统计打开的组件类名的次数
-
- @param className 打开的类名
- @param pluginId 组件
- */
--(void)countRouter:(NSString*)className pluginId:(NSString*)pluginId{
+    NSRegularExpression *routerRegex = [NSRegularExpression regularExpressionWithPattern:self.pluginRegex options:NSRegularExpressionCaseInsensitive error:nil];
+    NSTextCheckingResult *routerResult = [routerRegex firstMatchInString:url options:0 range:NSMakeRange(0, [url length])];
+    if (routerResult.range.length) {
+        return LSRouterOpenUrlType_Router;
+    }
     
-    NSMutableDictionary *openClass = [NSMutableDictionary dictionaryWithDictionary:[self.routesOpenCount objectForKey:pluginId]];
-    NSInteger count = [[openClass objectForKey:className] integerValue];
-    count++;
-    [openClass setValue:@(count) forKey:className];
-    [self.routesOpenCount setValue:openClass forKey:pluginId];
+    NSRegularExpression *httpRegex = [NSRegularExpression regularExpressionWithPattern:self.httpRegex options:NSRegularExpressionCaseInsensitive error:nil];
+    NSTextCheckingResult *httpResult = [httpRegex firstMatchInString:url options:0 range:NSMakeRange(0, [url length])];
+    if (httpResult.range.length) {
+        return LSRouterOpenUrlType_Url;
+    }
+    
+    NSRegularExpression *schemeRegex = [NSRegularExpression regularExpressionWithPattern:self.schemeRegex options:NSRegularExpressionCaseInsensitive error:nil];
+    NSTextCheckingResult *schemeResult = [schemeRegex firstMatchInString:url options:0 range:NSMakeRange(0, [url length])];
+    if (schemeResult.range.length) {
+        return LSRouterOpenUrlType_Scheme;
+    }
+   
+    return LSRouterOpenUrlType_Unkown;
 }
 
-
-/**
- 减少组件统计数
-
- @param className 类名
- @param pluginId 组件ID
- */
--(void)releaseRouterCount:(NSString*)className pluginId:(NSString*)pluginId{
+-(LSRouterParams*)routerBeforeFilter:(LSRouterParams*)param{
     
-    NSMutableDictionary *openClass = [NSMutableDictionary dictionaryWithDictionary:[self.routesOpenCount objectForKey:pluginId]];
+    LSRouterOptions *option = param.routerOptions;
     
-    if (openClass.count <= 0) {
-        return;
-    }
-    
-    NSInteger count = [[openClass objectForKey:className] integerValue];
-    count--;
-    
-    if (count <= 0) {
-        count = 0;
-    }
-    
-    [openClass setValue:@(count) forKey:className];
-    
-    BOOL isRunning = [self pluginIsRunning:openClass];
-    
-    if (!isRunning) {
+    if (![NSString isEmpty:option.routerBeforeFilter]) {
         
-        [self releasePlugin:pluginId];
-    }
-}
-
-/// 组件是否在运行
--(BOOL)pluginIsRunning:(NSDictionary*)openClass{
-    
-    __block BOOL result = NO;
-    
-    [openClass enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-       
-        NSInteger count = [obj integerValue];
+        Class cls = NSClassFromString(option.routerBeforeFilter);
         
-        if (count > 0) {
-            result = YES;
-            *stop = YES;
+        LSRouterFliter *filter = [[cls alloc] init];
+        
+        ///跳转拦截
+        if ([filter routerInterception]) {
+            return nil;
+        }
+    
+        //跳转加参数
+        NSDictionary *addParameter = [filter routerFilterParameter];
+        if (addParameter && [addParameter isKindOfClass:[NSDictionary class]]) {
+            NSMutableDictionary *data = [NSMutableDictionary dictionaryWithDictionary:param.extraParams];
+            [data addEntriesFromDictionary:addParameter];
+            param.extraParams = data;
         }
         
-    }];
+        //跳转重定向
+        if ([filter routerRedirect]) {
+            filter.parameter = param;
+            self.filter = filter;
+            [filter routerRedirectTask];
+            return nil;
+        }
+    }
     
-    return result;
+    return param;
 }
-
 
 /// 关闭组件运行
 -(void)releasePlugin:(NSString*)pluginId{

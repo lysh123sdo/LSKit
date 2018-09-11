@@ -11,7 +11,7 @@
 /**
  组件代理
  */
-@interface LSPluginManagerDelegate<NSObject>
+@protocol LSPluginManagerDelegate<NSObject>
 
 -(void)initializePluginManager;
 
@@ -21,9 +21,11 @@
 /**
  组件控制器
  */
-@interface LSPluginManager : NSObject
+@interface LSPluginManager : NSObject<LSPluginManagerDelegate>
 
 -(NSArray*)runningPlugin;
+
+-(void)existApp;
 
 /**
  获取实例对象
@@ -39,6 +41,9 @@
  @param pluginClass 需要注册的组件类
  */
 -(BOOL)registerPlugin:(NSString*)pluginId pluginClass:(NSString*)pluginClass;
+
+/// 添加黑名单
+-(void)addBlankList:(NSString*)pluginId clssess:(NSArray*)classes;
 
 /**
  注销组件
@@ -63,7 +68,7 @@
 -(void)stopRunningPluginByPluginId:(NSString*)pluginId;
 
 /// 组件是否已经运行
--(BOOL)pluginIsRunning:(NSString*)pluginId;
+-(BOOL)pluginIsRunning:(NSString*)pluginId className:(NSString*)className;
 
 /**
  获取一个正在运行的组件
@@ -72,6 +77,12 @@
  @return 运行中的组件
  */
 -(id)findRunningPluginByPluginId:(NSString*)pluginId;
+
+///通过class找组件ID
+-(id)findPluginByClassName:(NSString*)className;
+
+/// 是否需要关闭组件
+-(BOOL)sholdStopRunningPlugin:(NSArray*)navViewController;
 
 /**
  判断组件是否已经在注册列表

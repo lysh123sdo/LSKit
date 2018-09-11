@@ -16,7 +16,8 @@
 
 /// App启动调动 需要手动管理Application
 + (BOOL)lsPluginApplication:(UIApplication *)application
-didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
+didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+                     window:(UIWindow*)window;
 
 /// 屏幕旋转调用 需要手动管理Application
 +(UIInterfaceOrientationMask)lsPluginApplication:(UIApplication *)application
@@ -25,6 +26,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 
 /// 初始化的组件管理器
 +(NSString*)initializeClass;
+
++(void)initializeOk;
 
 +(UIViewController*)rootViewController;
 @end

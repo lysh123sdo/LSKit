@@ -7,36 +7,15 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "LSRouterOptions.h"
 
+@protocol LSRouterDelegate<NSObject>
 
-typedef void (^LSRouterOpenCallback)(NSDictionary *params);
++(instancetype)allocWithRouterParamsWithParams:(NSDictionary*)parameter;
 
-
-/**
- 路由操作
- */
-@interface LSRouterOptions:NSObject
-
-+ (instancetype)routerOptionsWithPresentationStyle: (UIModalPresentationStyle)presentationStyle
-                                   transitionStyle: (UIModalTransitionStyle)transitionStyle
-                                     defaultParams: (NSDictionary *)defaultParams
-                                            isRoot: (BOOL)isRoot
-                                           isModal: (BOOL)isModal;
-
-
-+ (instancetype)routerOptions;
-
-@property (nonatomic , assign) UIModalPresentationStyle presentationStyle;
-@property (nonatomic , assign) UIModalTransitionStyle transitionStyle;
-@property (nonatomic , strong) NSDictionary *defaultParams;
-@property (readwrite, nonatomic, assign) BOOL shouldOpenAsRootViewController;
-@property (readwrite, nonatomic, getter=isModal) BOOL modal;
-@property (readwrite, nonatomic, strong) NSString *pluginId;
+-(instancetype)initWithRouterParams:(NSDictionary*)parameter;
 
 @end
-
-
-
 /**
  路由控制器
  */
@@ -94,6 +73,17 @@ typedef void (^LSRouterOpenCallback)(NSDictionary *params);
  extraParams:(NSDictionary *)extraParams
   toCallback:(LSRouterOpenCallback)callback;
 
+///**
+// 跳转到制定控制器 并且给该制定控制器传数据
+// 
+// @param animated YES NO
+// @param url URL
+// @param extraParams 传递给制定控制器的参数
+// */
+- (void)popToViewController:(BOOL)animated
+                     format:(NSString*)url
+                extraParams:(NSDictionary *)extraParams;
+
 /**
  通过URL获取一个对象
 
@@ -101,7 +91,7 @@ typedef void (^LSRouterOpenCallback)(NSDictionary *params);
  @param extraParams 参数
  @return 需要获取的对象 未获取到返回nil
  */
--(UIViewController*)open:(NSString*)url extraParams:(NSDictionary *)extraParams;
+-(UIViewController*)openViewController:(NSString*)url extraParams:(NSDictionary *)extraParams;
 
 /// 获取栈顶控制器
 -(NSString*)topClass;
