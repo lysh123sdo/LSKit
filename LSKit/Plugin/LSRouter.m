@@ -349,7 +349,9 @@ typedef NS_ENUM(NSInteger , LSRouterOpenUrlType){
     NSString *className = NSStringFromClass(params.routerOptions.openClass);
     
     NSString *pluginId = [[LSPluginManager shareInstance] findPluginByClassName:className];
-  
+    
+    NSLog(@"@@@@@@@@@@@@@@@ : %@",pluginId);
+    
     if (pluginId) {
         //判断组件是否已经启动
         BOOL running = [[LSPluginManager shareInstance] pluginIsRunning:pluginId className:NSStringFromClass(params.routerOptions.openClass)];
