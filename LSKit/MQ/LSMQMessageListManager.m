@@ -21,6 +21,23 @@
 
 
 @implementation LSMQMessageListManager
+ static BOOL _isRunning;
+-(void)setIsRunning:(BOOL)isRunning{
+    
+    @synchronized(self){
+        
+        _isRunning = isRunning;
+    }
+    
+}
+
+- (BOOL)isRunning{
+    
+    @synchronized(self){
+        
+        return _isRunning;
+    }
+}
 
 
 static LSMQMessageListManager *_instance;
@@ -274,17 +291,17 @@ static LSMQMessageListManager *_instance;
 }
 
 -(void)push{
-    
+   
     LSMessageQueue *queue = [_msgQueueListArray firstObject];
     
     LSMessageModel *model = [_tempMsgArray firstObject];
     
-    if (model) {
+    if (model && !self.isRunning) {
+        self.isRunning = YES;
         [queue push:model];
         [_tempMsgArray removeObject:model];
-        self.isRunning = YES;
+        
     }
-    
 }
 
 -(void)addMessages:(LSMessageQueue*)queue{
@@ -305,6 +322,10 @@ static LSMQMessageListManager *_instance;
     }else{
         
         self.isRunning = NO;
+    }
+    
+    if (msgCount == 0) {
+        NSLog(@"4");
     }
  
 }

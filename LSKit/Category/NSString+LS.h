@@ -55,6 +55,18 @@
  */
 + (int) getRandomNumber:(int)from to:(int)to;
 
+//url编码
++ (NSString *)encodeToPercentEscapeString:(NSString *)input;
 
+//url解码
++ (NSString *)decodeFromPercentEscapeString:(NSString *)input;
+
++(NSString*)appendingZeroValue:(NSString*)value length:(NSInteger)length;
+
++(NSString *)scaleAndMoneyValue:(NSString*)value scale:(NSInteger)scale;
+
++(NSString *)scaleValue:(NSString*)value scale:(NSInteger)scale;
+
++(NSString *)scaleDownValue:(NSString*)value scale:(NSInteger)scale;
 
 @end

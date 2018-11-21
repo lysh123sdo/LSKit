@@ -166,5 +166,120 @@
     return (int)(from + (arc4random() % (to-from + 1)));
 }
 
++ (NSString *)encodeToPercentEscapeString:(NSString *)input {
+    // Encode all the reserved characters, per RFC 3986
+    // (<http://www.ietf.org/rfc/rfc3986.txt>)
+    NSString *outputStr = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,(CFStringRef)input,NULL,(CFStringRef)@"!*'();:@&=+$,/?%#[]",kCFStringEncodingUTF8));
+    return outputStr;
+}
++ (NSString *)decodeFromPercentEscapeString:(NSString *)input{
+    NSMutableString *outputStr = [NSMutableString stringWithString:input];
+    [outputStr replaceOccurrencesOfString:@"+"
+                               withString:@" "
+                                  options:NSLiteralSearch
+                                    range:NSMakeRange(0, [outputStr length])];
+    
+    return [outputStr stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
+
++(NSString *)scaleValue:(NSString*)value scale:(NSInteger)scale
+
+{
+    
+    NSDecimalNumberHandler* roundingBehavior = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundPlain scale:scale raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:YES];
+    
+    NSDecimalNumber *ouncesDecimal;
+    
+    NSDecimalNumber *roundedOunces;
+    
+    ouncesDecimal = [[NSDecimalNumber alloc]initWithString:value];
+    
+    roundedOunces = [ouncesDecimal decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
+    
+    NSString *result = [NSString stringWithFormat:@"%@",roundedOunces];
+    
+    result = [result stringByAppendingString:[self appendingZeroValue:result length:scale]];
+    
+    return result;//整数.00格式
+    
+}
+
++(NSString *)scaleAndMoneyValue:(NSString*)value scale:(NSInteger)scale
+
+{
+    
+    NSDecimalNumberHandler* roundingBehavior = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundPlain scale:scale raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:YES];
+    
+    NSDecimalNumber *ouncesDecimal;
+    
+    NSDecimalNumber *roundedOunces;
+    
+    ouncesDecimal = [[NSDecimalNumber alloc]initWithString:value];
+    
+    roundedOunces = [ouncesDecimal decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
+    
+    NSString *result = [NSString stringWithFormat:@"%@",roundedOunces];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = kCFNumberFormatterDecimalStyle;
+    NSNumber *number = [[NSNumber alloc] initWithDouble:result.doubleValue];
+    
+    result = [formatter stringFromNumber:number];
+    
+    result = [result stringByAppendingString:[self appendingZeroValue:result length:scale]];
+    
+    return result;//整数.00格式
+    
+}
+
++(NSString *)scaleDownValue:(NSString*)value scale:(NSInteger)scale
+{
+    
+    NSDecimalNumberHandler* roundingBehavior = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundDown scale:scale raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:YES];
+    
+    NSDecimalNumber *ouncesDecimal;
+    
+    NSDecimalNumber *roundedOunces;
+    
+    ouncesDecimal = [[NSDecimalNumber alloc]initWithString:value];
+    
+    roundedOunces = [ouncesDecimal decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
+    
+    NSString *result = [NSString stringWithFormat:@"%@",roundedOunces];
+    
+    result = [result stringByAppendingString:[self appendingZeroValue:result length:scale]];
+    
+    return result;//整数.00格式
+}
+
+
++(NSString*)appendingZeroValue:(NSString*)value length:(NSInteger)length{
+    
+    NSRange range = [value rangeOfString:@"."];
+    
+    NSString *result = @"";
+    
+    NSInteger oldLength = 0;
+    
+    if (range.length <= 0) {
+        oldLength = 0;
+        
+        if (length != 0) {
+            result = [result stringByAppendingString:@"."];
+        }
+        
+    }else{
+        NSString *notValue = [value substringFromIndex:range.location];
+        oldLength = notValue.length - 1;
+    }
+    
+    NSInteger count = length - oldLength;
+    
+    for (int i = 0; i < count; i++) {
+        result = [result stringByAppendingString:@"0"];
+    }
+    
+    return result;
+}
 
 @end

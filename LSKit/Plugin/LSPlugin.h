@@ -28,6 +28,7 @@
 /// 释放注销组件
 -(void)pluginDealloc;
 
+@optional
 /// 注册的控制器--将所有与该组件相关联的控制器注册
 +(NSArray*)registerViewControllers;
 

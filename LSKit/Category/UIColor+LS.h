@@ -29,4 +29,10 @@
  */
 + (UIColor *)colorWithHexString:(NSString *)color;
 
+/** 根据颜色获取0x字符串 */
++ (NSString*)getHexStringFromUIColor:(UIColor*)color;
+
+/** 随机色 */
++ (UIColor *)randomColor;
+
 @end

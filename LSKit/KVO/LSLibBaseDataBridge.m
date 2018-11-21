@@ -13,13 +13,13 @@
 @interface LSLibBaseDataBridge (){
     
     NSMutableDictionary *observers;
-    NSMutableDictionary *actions;
+    
     NSMutableArray *keyPaths;
    
     NSMutableArray *addKeyPath;
     NSMutableArray *propertys;
 }
-
+@property (nonatomic , strong) NSMutableDictionary *actions;
 
 @end
 @implementation LSLibBaseDataBridge
@@ -28,7 +28,7 @@
     [self removeAllBridge];
     [keyPaths removeAllObjects];
     observers = nil;
-    actions = nil;
+    self.actions = nil;
     keyPaths = nil;
     
     [addKeyPath removeAllObjects];
@@ -40,7 +40,7 @@
     self = [super init];
     if (self) {
         observers = [[NSMutableDictionary alloc] init];
-        actions = [[NSMutableDictionary alloc] init];
+        self.actions = [[NSMutableDictionary alloc] init];
         keyPaths = [[NSMutableArray alloc] init];
        
         addKeyPath = [[NSMutableArray alloc] init];
@@ -68,14 +68,14 @@
     }
     NSString *className;// = NSStringFromClass([observer class]);
     className = [NSString stringWithFormat:@"%@_%p" , keyPath , observer];
-    NSMutableArray *actionArr = [actions objectForKey:className];
+    NSMutableArray *actionArr = [self.actions objectForKey:className];
     if (!actionArr) {
         actionArr = [[NSMutableArray alloc] init];
     }
     if (![actionArr containsObject:NSStringFromSelector(action)]) {
         [actionArr addObject:NSStringFromSelector(action)];
     }
-    [actions setObject:actionArr forKey:className];
+    [self.actions setObject:actionArr forKey:className];
     if (![keyPaths containsObject:keyPath]) {
         [keyPaths addObject:keyPath];
     }
@@ -87,7 +87,7 @@
         [objs removeObject:observer];
         NSString *className;// = NSStringFromClass([observer class]);
         className = [NSString stringWithFormat:@"%@_%p" , keyPath , observer];
-        [actions removeObjectForKey:className];
+        [self.actions removeObjectForKey:className];
     }
 }
 
@@ -106,7 +106,7 @@
             [objs removeObject:obj];
             NSString *className;// = NSStringFromClass([obj class]);
             className = [NSString stringWithFormat:@"%@_%p" , keyPath , obj];
-            [actions removeObjectForKey:className];
+            [self.actions removeObjectForKey:className];
         }
     }
 }
@@ -128,7 +128,7 @@
         }
     }
     [observers removeAllObjects];
-    [actions removeAllObjects];
+    [self.actions removeAllObjects];
 }
 
 
@@ -139,10 +139,12 @@
     if (objs && [[objs allObjects] isKindOfClass:[NSArray class]]) {
         [[objs allObjects] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (obj) {
+                
+                __weak typeof(self) weakSelf = self;
                 @synchronized(self){
                     NSString *className;
                     className = [NSString stringWithFormat:@"%@_%p" , keyPath , obj];
-                    NSMutableArray *actionArr = [actions objectForKey:className];
+                    NSMutableArray *actionArr = [weakSelf.actions objectForKey:className];
                     [actionArr enumerateObjectsUsingBlock:^(id  _Nonnull actionName, NSUInteger idx, BOOL * _Nonnull stop) {
                         SEL action = NSSelectorFromString(actionName);
                         if (action && [obj respondsToSelector:action]) {

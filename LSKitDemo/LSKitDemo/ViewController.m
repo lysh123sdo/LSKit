@@ -9,20 +9,25 @@
 #import "ViewController.h"
 
 #import <LSKit/LSKit.h>
-@interface ViewController ()
+@interface ViewController ()<LSMQTopicReceiveProtocol>
 
 @end
 
 @implementation ViewController
 
+-(void)topicReceive:(id)msg topic:(NSString *)topic{
+    
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSString *url = @"测试 2018-12-1 abc";
-    
-    NSString *urlCode = [url urlEncodedString];
-    NSLog(@"%@",urlCode);
-    NSLog(@"%@",[urlCode urlDecodedString]);
+//
+//    NSString *url = @"测试 2018-12-1 abc";
+//
+//    NSString *urlCode = [url urlEncodedString];
+//    NSLog(@"%@",urlCode);
+//    NSLog(@"%@",[urlCode urlDecodedString]);
 //    [[LSRouter sharedRouter] setNavigationController:self.navigationController];
 //
 //    [[LSRouter sharedRouter] map:@"TestViewController" toController:NSClassFromString(@"TestViewController")];
@@ -37,22 +42,27 @@
     button.backgroundColor = [UIColor redColor];
     [button addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
+    
+    [[LSMQMessageListManager shareInstance] addTopic:(id<LSMQTopicReceiveProtocol>)self topic:@"test"];
 }
 
 
 -(void)btnClick{
-    
-    [[LSRouter sharedRouter] open:@"TestViewController" animated:YES extraParams:@{@"key":@"value"} toCallback:^(NSDictionary *params) {
+
+    NSLog(@"1");
+    for (int i = 0 ; i < 1000000; i++) {
         
-        NSLog(@"回调参数 %@",params);
-    }];
+        [[LSMQMessageListManager shareInstance] addMsg:@(i) topic:@"test"];
+//        [datas addObject:@(i)];
+    }
+    NSLog(@"2");
+    
+//    [[LSRouter sharedRouter] open:@"TestViewController" animated:YES extraParams:@{@"key":@"value"} toCallback:^(NSDictionary *params) {
+//
+//        NSLog(@"回调参数 %@",params);
+//    }];
 
     
-}
-
--(void)topicReceive:(id)msg topic:(NSString*)topic{
-    
-    NSLog(@"@@@@@@@@ %@",topic);
 }
 
 - (void)didReceiveMemoryWarning {

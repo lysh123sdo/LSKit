@@ -239,7 +239,7 @@ NSString * const LSUploadFileKeyKey = @"com.LSCode.upload.key";
                       
                       dispatch_async(dispatch_get_main_queue(), ^{
                           
-                          if (self.delegate && [self.delegate respondsToSelector:@selector(LSRequest:progress:)]) {
+                          if (self.delegate && [self.delegate respondsToSelector:@selector(lsRequest:progress:)]) {
                               
                               [self.delegate lsRequest:self progress:uploadProgress];
                           }
@@ -308,13 +308,12 @@ NSString * const LSUploadFileKeyKey = @"com.LSCode.upload.key";
 
     AFHTTPSessionManager *manager = [LSRequest httpManager];
 
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
     [manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
     manager.requestSerializer.timeoutInterval = [self requestTimeoutInterval];
     [manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
     manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
-    manager.responseSerializer.stringEncoding = NSUTF8StringEncoding;
-    
+
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json",@"text/javascript",@"text/html",nil];
 
     [self.engine.httpHeaders enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {

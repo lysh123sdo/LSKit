@@ -121,7 +121,6 @@
  *
  *  @param url URL
  *  @param paramas  提交的数据
- *  @param apiLevel  api等级，涉及到加密
  */
 -(NSURLSessionTask*)postDataWithUrl:(NSString*)url paramas:(NSDictionary*)paramas{
     
@@ -135,7 +134,6 @@
  *
  *  @param url URL
  *  @param paramas  提交的数据
- *  @param apiLevel  api等级，涉及到加密
  */
 -(NSURLSessionTask*)getDataWithUrl:(NSString*)url paramas:(NSDictionary*)paramas{
     
@@ -150,7 +148,6 @@
  *  @param url URL
  *  @param paramas  提交的数据
  *  @param files    文件
- *  @param apiLevel  api等级，涉及到加密
  */
 -(NSURLSessionTask*)uploadFilesWithUrl:(NSString*)url paramas:(NSDictionary*)paramas files:(NSArray*)files{
     
@@ -276,6 +273,8 @@
     }
     
 }
+
+
 
 -(void)dealloc{
     

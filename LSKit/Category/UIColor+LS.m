@@ -72,4 +72,21 @@
     return [UIColor colorWithRed:((float) r / 255.0f) green:((float) g / 255.0f) blue:((float) b / 255.0f) alpha:1.0f];
 }
 
++ (UIColor *)randomColor {
+    CGFloat red =  (CGFloat)random() / (CGFloat)RAND_MAX;
+    CGFloat blue = (CGFloat)random() / (CGFloat)RAND_MAX;
+    CGFloat green = (CGFloat)random() / (CGFloat)RAND_MAX;
+    return [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+}
+
++ (NSString *)getHexStringFromUIColor:(UIColor *)color {
+    CGFloat r, g, b, a;
+    
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    
+    int rgb = (int) (r * 255.0f)<<16 | (int) (g * 255.0f)<<8 | (int) (b * 255.0f)<<0;
+    
+    NSString *str = [[NSString stringWithFormat:@"%06x", rgb] uppercaseString];
+    return [NSString stringWithFormat:@"0x%@", str];
+}
 @end

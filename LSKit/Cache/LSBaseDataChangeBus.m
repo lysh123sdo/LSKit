@@ -150,7 +150,13 @@
                     [actionArr enumerateObjectsUsingBlock:^(id  _Nonnull actionName, NSUInteger idx, BOOL * _Nonnull stop) {
                         SEL action = NSSelectorFromString(actionName);
                         if (action && [obj respondsToSelector:action]) {
+                            
+                            #pragma clang diagnostic push
+                            #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+
                             [obj performSelector:action withObject:change];
+                            
+                            #pragma clang diagnostic pop
                         }
                     }];
                 }

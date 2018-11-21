@@ -13,6 +13,7 @@
  */
 @protocol LSPluginManagerDelegate<NSObject>
 
+@optional
 -(void)initializePluginManager;
 
 @end

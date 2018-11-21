@@ -145,7 +145,7 @@ FOUNDATION_EXPORT NSString * const LSUploadFileKeyKey;
  */
 -(void)lsRequest:(LSRequest*)request progress:(NSProgress*)progress;
 
-
+@optional
 /**
  上传或者下载回调存储地址
 
@@ -156,6 +156,7 @@ FOUNDATION_EXPORT NSString * const LSUploadFileKeyKey;
 -(void)lsRequest:(LSRequest *)request filePath:(NSURL*)filePath error:(NSError*)error;
 
 
+@optional
 /**
  下载存储地址
 

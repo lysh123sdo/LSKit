@@ -25,6 +25,26 @@
 
 @implementation LSMessageQueue
 
+static BOOL _issRunning;
+
+-(void)setIsRunning:(BOOL)isRunning{
+    
+    @synchronized(self){
+        
+        _issRunning = isRunning;
+    }
+    
+}
+
+- (BOOL)isRunning{
+    
+    @synchronized(self){
+        
+        return _issRunning;
+    }
+}
+
+
 -(void)runLoopScheduleRouting:(LSRunloopContext *)context strRef:(CFStringRef)mode{
     
     self.context = context;
