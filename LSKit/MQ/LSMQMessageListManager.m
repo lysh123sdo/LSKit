@@ -323,10 +323,6 @@ static LSMQMessageListManager *_instance;
         
         self.isRunning = NO;
     }
-    
-    if (msgCount == 0) {
-        NSLog(@"4");
-    }
  
 }
 
