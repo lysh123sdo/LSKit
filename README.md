@@ -1,21 +1,34 @@
 # LSKit
-Swift Utils Kit
-
-####组件化消息通信:LSMQMessageListManager消息队列管理
-
->添加消息监听
-
-[[LSMQMessageListManager shareInstance] addTopic:(id)self topic:@"testwTopic"];
-
->添加消息
-
-[[LSMQMessageListManager shareInstance] addMsg:text topic:@"testwTopic"];
-
->消息回调
-
--(void)topicReceive:(id)msg topic:(NSString*)topic
 
 
->###使用方式
 
-pod 'LSKit'
+#### 提供应用内语言语言切换
+
+
+#### 提供AFNetworking二次封装
+
+
+#### 提供组件解耦方案
+
+
+####便捷工具及分类 
+
+
+##组件解耦
+
+LSMQMessageListManager 消息通信管理中间件
+
+LSRouter 跳转路由
+
+LSPluginManager 组件管理器
+
+
+##语言切换
+
+LSLabelServer 应用内语言切换
+
+
+##AFNetworking网络请求二次封装
+LSRequestModel 请求Model
+
+

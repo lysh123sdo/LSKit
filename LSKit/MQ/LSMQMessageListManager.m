@@ -313,7 +313,9 @@ static LSMQMessageListManager *_instance;
         [msgs addObject:[_tempMsgArray objectAtIndex:i]];
         
     }
+    
     [queue pushMsgs:msgs];
+    
     [_tempMsgArray removeObjectsInArray:msgs];
     
     if (_tempMsgArray.count > 0) {

@@ -11,8 +11,9 @@
 
 @protocol LSRouterDelegate<NSObject>
 
+@optional
 +(instancetype)allocWithRouterParamsWithParams:(NSDictionary*)parameter;
-
+@optional
 -(instancetype)initWithRouterParams:(NSDictionary*)parameter;
 
 @end
