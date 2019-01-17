@@ -33,7 +33,7 @@
 #import <LSKit/LSRequestModel.h>
 #import <LSKit/LSRequestFliter.h>
 #import <LSKit/LSRequestStatusModel.h>
-
+#import <LSKit/LSCommonDef.h>
 
 
 
