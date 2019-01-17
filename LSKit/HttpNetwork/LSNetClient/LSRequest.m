@@ -207,7 +207,7 @@ NSString * const LSUploadFileKeyKey = @"com.LSCode.upload.key";
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
     __weak NSArray *files = self.postFiles;
-    
+//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json",@"text/javascript",@"text/html",nil];
     __block AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
     
     [self.engine.httpHeaders enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
@@ -225,8 +225,14 @@ NSString * const LSUploadFileKeyKey = @"com.LSCode.upload.key";
             NSString *fileName = [dic objectForKey:LSUploadFileNameKey];
             NSString *key = [dic objectForKey:LSUploadFileKeyKey];
             NSString *type = [dic objectForKey:LSUploadFileTypeKey];
-            NSString *filePath = [dic objectForKey:LSUploadFilePathKey];
-            [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:key fileName:fileName mimeType:type error:nil];
+            id filePath = [dic objectForKey:LSUploadFilePathKey];
+            
+            if ([filePath isKindOfClass:[NSData class]]) {
+                [formData appendPartWithFileData:filePath name:key fileName:fileName mimeType:type];
+            }else{
+                [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:key fileName:fileName mimeType:type error:nil];
+            }
+            
         }];
         
     } error:nil];
@@ -238,7 +244,7 @@ NSString * const LSUploadFileKeyKey = @"com.LSCode.upload.key";
                   progress:^(NSProgress * _Nonnull uploadProgress) {
                       
                       dispatch_async(dispatch_get_main_queue(), ^{
-                          
+                         
                           if (self.delegate && [self.delegate respondsToSelector:@selector(lsRequest:progress:)]) {
                               
                               [self.delegate lsRequest:self progress:uploadProgress];
@@ -246,7 +252,18 @@ NSString * const LSUploadFileKeyKey = @"com.LSCode.upload.key";
                       });
                   }
                   completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-                     
+                      
+                      if (!error) {
+                          if (self.delegate && [self.delegate respondsToSelector:@selector(lsRequestFinish:response:)]) {
+                              
+                              [self.delegate lsRequestFinish:self response:responseObject];
+                          }
+                      }else{
+                          if (self.delegate && [self.delegate respondsToSelector:@selector(lsRequestFail:error:)]) {
+                              
+                              [self.delegate lsRequestFail:self error:error];
+                          }
+                      }
                   }];
     
     [self.sessionTask resume];

@@ -70,4 +70,9 @@
                            fail:(void(^)(id model))fail
                        progress:(void(^)(NSProgress *progress))progress;
 
+-(LSApiEngine*)getApiEngine;
+
+-(LSRequestStatusModel*)getResponseSerializer;
+
 @end
+
