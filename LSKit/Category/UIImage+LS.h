@@ -48,5 +48,6 @@
 - (UIImage *)imageByRoundCornerRadius:(CGFloat)radius
                           borderWidth:(CGFloat)borderWidth
                           borderColor:(UIColor *)borderColor;
-
+    
++ (UIImage *)imageScreenShot;
 @end
