@@ -50,4 +50,6 @@
                           borderColor:(UIColor *)borderColor;
     
 + (UIImage *)imageScreenShot;
+
++ (UIImage *)getScreenShotImageFromVideoPath:(NSString *)filePath;
 @end
