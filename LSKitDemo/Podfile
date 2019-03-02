@@ -6,5 +6,9 @@ target 'LSKitDemo' do
     
      pod 'LSKit', :path => ‘../‘
      
-  
+     target 'LSKitDemoTests' do
+         inherit! :search_paths
+         
+     end
+     
 end

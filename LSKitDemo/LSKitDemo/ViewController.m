@@ -8,17 +8,12 @@
 
 #import "ViewController.h"
 
-#import <LSKit/LSKit.h>
-@interface ViewController ()<LSMQTopicReceiveProtocol>
+@interface ViewController ()
 
 @end
 
 @implementation ViewController
 
--(void)topicReceive:(id)msg topic:(NSString *)topic{
-    
-    
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,25 +38,13 @@
     [button addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
     
-    [[LSMQMessageListManager shareInstance] addTopic:(id<LSMQTopicReceiveProtocol>)self topic:@"test"];
+
 }
 
 
 -(void)btnClick{
 
-    NSLog(@"1");
-    for (int i = 0 ; i < 1000000; i++) {
-        
-        [[LSMQMessageListManager shareInstance] addMsg:@(i) topic:@"test"];
-//        [datas addObject:@(i)];
-    }
-    NSLog(@"2");
-    
-//    [[LSRouter sharedRouter] open:@"TestViewController" animated:YES extraParams:@{@"key":@"value"} toCallback:^(NSDictionary *params) {
-//
-//        NSLog(@"回调参数 %@",params);
-//    }];
-
+   
     
 }
 

@@ -21,7 +21,7 @@ PODS:
   - CocoaLumberjack/Extensions (3.3.0):
     - CocoaLumberjack/Default
   - JTObjectMapping (1.1.2)
-  - LSKit (0.0.1):
+  - LSKit (0.0.2):
     - AFNetworking
     - CocoaLumberjack (~> 3.3.0)
     - JTObjectMapping (~> 1.1.2)
@@ -34,7 +34,7 @@ DEPENDENCIES:
   - LSKit (from `../`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - CocoaLumberjack
     - JTObjectMapping
@@ -48,9 +48,9 @@ SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   CocoaLumberjack: 3c8c74683302f9012bb168e1c4b7ae3c0b558431
   JTObjectMapping: 179cae6acadb27be5b7f5c019c216cb99d28e112
-  LSKit: dc7ab898d8cf4492f28f809df593eff00cdda2df
+  LSKit: ae53501fec37890a2a3a78eba12cd813be659f5a
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: acaaac88dfdcb42fa8d418bef1b67aa3954b07d1
+PODFILE CHECKSUM: 5a85f57015811d77fac2ff1521e0fc7ec95591dd
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.5.0

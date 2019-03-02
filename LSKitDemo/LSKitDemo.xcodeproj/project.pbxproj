@@ -7,20 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		965AC4F30DF9B93E06FC7496 /* Pods_LSKitDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33365272271A87E7EB8A9DE3 /* Pods_LSKitDemoTests.framework */; };
+		970DA19C222A7D6600A900DE /* LSKitDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970DA19B222A7D6600A900DE /* LSKitDemoTests.swift */; };
 		971BC9C82075CB0900BD773D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 971BC9C72075CB0900BD773D /* AppDelegate.m */; };
 		971BC9CB2075CB0900BD773D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 971BC9CA2075CB0900BD773D /* ViewController.m */; };
 		971BC9CE2075CB0900BD773D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 971BC9CC2075CB0900BD773D /* Main.storyboard */; };
 		971BC9D02075CB0900BD773D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 971BC9CF2075CB0900BD773D /* Assets.xcassets */; };
 		971BC9D32075CB0900BD773D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 971BC9D12075CB0900BD773D /* LaunchScreen.storyboard */; };
 		971BC9D62075CB0900BD773D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 971BC9D52075CB0900BD773D /* main.m */; };
-		97CC023120B436B800044B22 /* TestPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 97CC023020B436B800044B22 /* TestPlugin.m */; };
-		97CC023420B449D900044B22 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97CC023320B449D900044B22 /* TestViewController.m */; };
 		A2E7D89177D8473E9140C05B /* Pods_LSKitDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008FC65DE8291FC471C65836 /* Pods_LSKitDemo.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		970DA19E222A7D6600A900DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 971BC9BB2075CB0900BD773D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 971BC9C22075CB0900BD773D;
+			remoteInfo = LSKitDemo;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		008FC65DE8291FC471C65836 /* Pods_LSKitDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LSKitDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01882EDD0334CF9E0B049012 /* Pods-LSKitDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSKitDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LSKitDemoTests/Pods-LSKitDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		260789641184CBCA365EFC61 /* Pods-LSKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSKitDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LSKitDemo/Pods-LSKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		33365272271A87E7EB8A9DE3 /* Pods_LSKitDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LSKitDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		58EAC0178C14E118CDC07148 /* Pods-LSKitDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSKitDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LSKitDemoTests/Pods-LSKitDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		970DA199222A7D6600A900DE /* LSKitDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LSKitDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		970DA19B222A7D6600A900DE /* LSKitDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LSKitDemoTests.swift; sourceTree = "<group>"; };
+		970DA19D222A7D6600A900DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		971BC9C32075CB0900BD773D /* LSKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LSKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		971BC9C62075CB0900BD773D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		971BC9C72075CB0900BD773D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -31,14 +47,18 @@
 		971BC9D22075CB0900BD773D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		971BC9D42075CB0900BD773D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		971BC9D52075CB0900BD773D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		97CC022F20B436B800044B22 /* TestPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestPlugin.h; sourceTree = "<group>"; };
-		97CC023020B436B800044B22 /* TestPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestPlugin.m; sourceTree = "<group>"; };
-		97CC023220B449D900044B22 /* TestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
-		97CC023320B449D900044B22 /* TestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
 		BDC65EF7A68696E6BBECECF6 /* Pods-LSKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSKitDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-LSKitDemo/Pods-LSKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		970DA196222A7D6600A900DE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				965AC4F30DF9B93E06FC7496 /* Pods_LSKitDemoTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		971BC9C02075CB0900BD773D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -55,6 +75,8 @@
 			children = (
 				260789641184CBCA365EFC61 /* Pods-LSKitDemo.debug.xcconfig */,
 				BDC65EF7A68696E6BBECECF6 /* Pods-LSKitDemo.release.xcconfig */,
+				58EAC0178C14E118CDC07148 /* Pods-LSKitDemoTests.debug.xcconfig */,
+				01882EDD0334CF9E0B049012 /* Pods-LSKitDemoTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -63,14 +85,25 @@
 			isa = PBXGroup;
 			children = (
 				008FC65DE8291FC471C65836 /* Pods_LSKitDemo.framework */,
+				33365272271A87E7EB8A9DE3 /* Pods_LSKitDemoTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		970DA19A222A7D6600A900DE /* LSKitDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				970DA19B222A7D6600A900DE /* LSKitDemoTests.swift */,
+				970DA19D222A7D6600A900DE /* Info.plist */,
+			);
+			path = LSKitDemoTests;
 			sourceTree = "<group>";
 		};
 		971BC9BA2075CB0900BD773D = {
 			isa = PBXGroup;
 			children = (
 				971BC9C52075CB0900BD773D /* LSKitDemo */,
+				970DA19A222A7D6600A900DE /* LSKitDemoTests */,
 				971BC9C42075CB0900BD773D /* Products */,
 				195D7F1017DBA96DF9A144CB /* Pods */,
 				69B1E397B6F0DE29CCA99116 /* Frameworks */,
@@ -81,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				971BC9C32075CB0900BD773D /* LSKitDemo.app */,
+				970DA199222A7D6600A900DE /* LSKitDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,10 +131,6 @@
 				971BC9D12075CB0900BD773D /* LaunchScreen.storyboard */,
 				971BC9D42075CB0900BD773D /* Info.plist */,
 				971BC9D52075CB0900BD773D /* main.m */,
-				97CC022F20B436B800044B22 /* TestPlugin.h */,
-				97CC023020B436B800044B22 /* TestPlugin.m */,
-				97CC023220B449D900044B22 /* TestViewController.h */,
-				97CC023320B449D900044B22 /* TestViewController.m */,
 			);
 			path = LSKitDemo;
 			sourceTree = "<group>";
@@ -108,6 +138,25 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		970DA198222A7D6600A900DE /* LSKitDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 970DA1A0222A7D6600A900DE /* Build configuration list for PBXNativeTarget "LSKitDemoTests" */;
+			buildPhases = (
+				38B58379D78CA3C48DFAB3E7 /* [CP] Check Pods Manifest.lock */,
+				970DA195222A7D6600A900DE /* Sources */,
+				970DA196222A7D6600A900DE /* Frameworks */,
+				970DA197222A7D6600A900DE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				970DA19F222A7D6600A900DE /* PBXTargetDependency */,
+			);
+			name = LSKitDemoTests;
+			productName = LSKitDemoTests;
+			productReference = 970DA199222A7D6600A900DE /* LSKitDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		971BC9C22075CB0900BD773D /* LSKitDemo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 971BC9D92075CB0900BD773D /* Build configuration list for PBXNativeTarget "LSKitDemo" */;
@@ -133,9 +182,16 @@
 		971BC9BB2075CB0900BD773D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				DefaultBuildSystemTypeForWorkspace = Original;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = LSKitDemo;
 				TargetAttributes = {
+					970DA198222A7D6600A900DE = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 971BC9C22075CB0900BD773D;
+					};
 					971BC9C22075CB0900BD773D = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
@@ -156,11 +212,19 @@
 			projectRoot = "";
 			targets = (
 				971BC9C22075CB0900BD773D /* LSKitDemo */,
+				970DA198222A7D6600A900DE /* LSKitDemoTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		970DA197222A7D6600A900DE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		971BC9C12075CB0900BD773D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -174,6 +238,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		38B58379D78CA3C48DFAB3E7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LSKitDemoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3C485CDC0123F8ECBDD1EB91 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -221,19 +303,33 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		970DA195222A7D6600A900DE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				970DA19C222A7D6600A900DE /* LSKitDemoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		971BC9BF2075CB0900BD773D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				971BC9CB2075CB0900BD773D /* ViewController.m in Sources */,
 				971BC9D62075CB0900BD773D /* main.m in Sources */,
-				97CC023120B436B800044B22 /* TestPlugin.m in Sources */,
 				971BC9C82075CB0900BD773D /* AppDelegate.m in Sources */,
-				97CC023420B449D900044B22 /* TestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		970DA19F222A7D6600A900DE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 971BC9C22075CB0900BD773D /* LSKitDemo */;
+			targetProxy = 970DA19E222A7D6600A900DE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		971BC9CC2075CB0900BD773D /* Main.storyboard */ = {
@@ -255,6 +351,52 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		970DA1A1222A7D6600A900DE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 58EAC0178C14E118CDC07148 /* Pods-LSKitDemoTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = LSKitDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = LSKitDemoTests.LSKitDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LSKitDemo.app/LSKitDemo";
+			};
+			name = Debug;
+		};
+		970DA1A2222A7D6600A900DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 01882EDD0334CF9E0B049012 /* Pods-LSKitDemoTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = LSKitDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = LSKitDemoTests.LSKitDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LSKitDemo.app/LSKitDemo";
+			};
+			name = Release;
+		};
 		971BC9D72075CB0900BD773D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -390,6 +532,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		970DA1A0222A7D6600A900DE /* Build configuration list for PBXNativeTarget "LSKitDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				970DA1A1222A7D6600A900DE /* Debug */,
+				970DA1A2222A7D6600A900DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		971BC9BE2075CB0900BD773D /* Build configuration list for PBXProject "LSKitDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

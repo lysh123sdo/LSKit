@@ -92,6 +92,7 @@ static BOOL _issRunning;
 
 -(void)main{
     
+    
     @autoreleasepool{
         
         NSRunLoop *myRunLoop = [NSRunLoop currentRunLoop];
@@ -106,7 +107,9 @@ static BOOL _issRunning;
             [myRunLoop runMode:NSDefaultRunLoopMode
                     beforeDate:[NSDate distantFuture]];
         }
+        
     }
+    
 }
 
 #pragma mark -话题添加
