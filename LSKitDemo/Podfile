@@ -5,6 +5,8 @@ use_frameworks!
 target 'LSKitDemo' do
     
      pod 'LSKit', :path => ‘../‘
+     pod 'SDWebImage'
+     pod 'ReactiveCocoa'
      
      target 'LSKitDemoTests' do
          inherit! :search_paths

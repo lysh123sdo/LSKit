@@ -26,18 +26,23 @@ PODS:
     - CocoaLumberjack (~> 3.3.0)
     - JTObjectMapping (~> 1.1.2)
     - YYKit (~> 1.0.9)
+  - SDWebImage (4.4.5):
+    - SDWebImage/Core (= 4.4.5)
+  - SDWebImage/Core (4.4.5)
   - YYKit (1.0.9):
     - YYKit/no-arc (= 1.0.9)
   - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
   - LSKit (from `../`)
+  - SDWebImage
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - CocoaLumberjack
     - JTObjectMapping
+    - SDWebImage
     - YYKit
 
 EXTERNAL SOURCES:
@@ -49,8 +54,9 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 3c8c74683302f9012bb168e1c4b7ae3c0b558431
   JTObjectMapping: 179cae6acadb27be5b7f5c019c216cb99d28e112
   LSKit: ae53501fec37890a2a3a78eba12cd813be659f5a
+  SDWebImage: ecc03494e973b93b80213649d32175f8d2d17d4d
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 5a85f57015811d77fac2ff1521e0fc7ec95591dd
+PODFILE CHECKSUM: 6a555e385e391a077b59273e26469643f027f7c4
 
 COCOAPODS: 1.5.0

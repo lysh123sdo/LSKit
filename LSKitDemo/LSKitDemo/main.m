@@ -11,6 +11,24 @@
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+        
+        NSLog(@"@@@@@1");
+        
+        int arg = UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+        
+        NSLog(@"@@@@@2");
+        
+        return arg;
     }
 }
+
+//#import <Foundation/Foundation.h>
+//
+//int main(int argc, char * argv[]) {
+//    @autoreleasepool {
+//        NSObject *obj = [[NSObject alloc] init];
+//        NSLog(@"%@",obj);
+//    }
+//
+//    return 0;
+//}

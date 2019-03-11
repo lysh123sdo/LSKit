@@ -25,6 +25,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/lysh123sdo/LSKit.git', :tag => s.version.to_s}
   s.requires_arc = true
   
+  s.swift_version = '4.2'
+  
   s.dependency 'CocoaLumberjack', '~> 3.3.0'
   s.dependency 'YYKit', '~> 1.0.9'
   s.dependency 'AFNetworking'

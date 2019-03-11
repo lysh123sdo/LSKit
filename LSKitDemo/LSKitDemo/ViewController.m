@@ -8,8 +8,22 @@
 
 #import "ViewController.h"
 
+
+void recuverString(char str[]){
+
+    
+    //    int i = 0;
+    
+    
+//    for (int i = 0 ; i < ; <#increment#>) {
+//        <#statements#>
+//    }
+    
+}
+
 @interface ViewController ()
 
+@property (nonatomic , strong) NSMutableDictionary *tempDic;
 @end
 
 @implementation ViewController
@@ -17,28 +31,36 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//
-//    NSString *url = @"测试 2018-12-1 abc";
-//
-//    NSString *urlCode = [url urlEncodedString];
-//    NSLog(@"%@",urlCode);
-//    NSLog(@"%@",[urlCode urlDecodedString]);
-//    [[LSRouter sharedRouter] setNavigationController:self.navigationController];
-//
-//    [[LSRouter sharedRouter] map:@"TestViewController" toController:NSClassFromString(@"TestViewController")];
-//
-//    [[LSMQMessageListManager shareInstance] addTopic:(id<LSMQTopicReceiveProtocol>)self topic:@"test"];
-//
-//
-//    [[LSMQMessageListManager shareInstance] addMsg:@"测试" topic:@"test"];
-    // Do any additional setup after loading the view, typically from a nib.
     
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(20, 70, 100, 100)];
-    button.backgroundColor = [UIColor redColor];
-    [button addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
+    char c[] = "123456789";
     
-
+    recuverString(c);
+    
+//    NSString *tempStr = @"1234567890";
+//
+//    NSString *test = @"";
+//
+//    for (int i = 0 ; i < tempStr.length; i++) {
+//
+//        NSString *a = [tempStr substringWithRange:NSMakeRange(i, 1)];
+//
+////        NSLog(@"%@",a);
+//        test = [NSString stringWithFormat:@"%@%@",a,test];
+//
+//    }
+//
+//    NSLog(@"%@",test);
+    
+//    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+//
+//    NSMutableDictionary *a = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"v1",@"k1",@"v2",@"k2", nil];
+//
+//    self.tempDic = a;
+//
+//    [self.tempDic setValue:@"v3" forKey:@"k1"];
+//
+//    NSLog(@"%@",a);
+    
 }
 
 
